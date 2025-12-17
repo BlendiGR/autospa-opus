@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tyre {
+  id         Int       @id @default(autoincrement())
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId Int?
+  number     String    @db.VarChar(20)
+  plate      String    @unique @db.Citext
+  location   String?   @db.VarChar(50)
+  dateStored DateTime?
+
+  deletedAt DateTime?
+
+  @@index([dateStored])
+  @@index([location])
+}
+
+model Invoices {
+  id          Int       @id @default(autoincrement())
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  customerId  Int
+  plate       String    @db.Citext
+  services    String[]
+  totalAmount Decimal
+  totalTax    Decimal
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([customerId])
+  @@index([plate])
+}
+
+model Customer {
+  id       Int        @id @default(autoincrement())
+  email    String?    @unique
+  phone    String?
+  plate    String?    @db.Citext
+  name     String
+  company  String?
+  tyres    Tyre[]
+  invoices Invoices[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([plate])
+}
