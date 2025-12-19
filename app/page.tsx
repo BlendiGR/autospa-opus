@@ -1,8 +1,17 @@
 
 import Image from "next/image";
 import { LoginForm } from "@/components/ui/LoginForm";
+import { signIn } from "next-auth/react";
+import { LoginData } from "@/schemas/loginSchema";
+
 
 export default function Home() {
+
+  const onSubmit = async (data: LoginData) => {
+    "use server"
+    await signIn("credentials", data)
+  }
+
   return (
       <main className="flex min-h-screen items-center justify-center bg-brand-gradient w-full">
         <div className="flex flex-col items-center justify-center w-full gap-8">
@@ -21,7 +30,7 @@ export default function Home() {
               <p className="text-sm text-white">Login to your account</p>
             </div>
             <div className="pt-30 w-full">
-              <LoginForm />
+              <LoginForm onSubmit={onSubmit} />
             </div>
           </div>
         </div>
