@@ -1,9 +1,7 @@
-"use server"
-
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { saltAndHashPassword, verifyPassword } from "@/utils/saltAndHashPassword"
-
+import { verifyPassword } from "@/utils/saltAndHashPassword"
+import { prisma } from "@/prisma/prisma"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -13,20 +11,48 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        let user = null
+        try {
+          const email = credentials?.email as string
+          const password = credentials?.password as string
 
-        
- 
- 
- 
-        if (!user) {
-          // No user found, so this is their first attempt to login
-          // Optionally, this is also the place you could do a user registration
-          throw new Error("Invalid credentials.")
+          if (!email || !password) {
+            return null
+          }
+
+          const getUserFromDb = await prisma.user.findUnique({
+            where: {
+              email: email,
+            },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              password: true,
+            },
+          })
+
+          // Return null if user not found
+          if (!getUserFromDb) {
+            return null
+          }
+
+          const isPasswordValid = verifyPassword(password, getUserFromDb.password)
+
+          // Return null if password is invalid
+          if (!isPasswordValid) {
+            return null
+          }
+
+          // Return user object with their profile data
+          return {
+            id: String(getUserFromDb.id), // nextAuth expects id to be a string
+            name: getUserFromDb.name,
+            email: getUserFromDb.email,
+          }
+        } catch (error) {
+          console.error("Auth error:", error)
+          return null
         }
- 
-        // return user object with their profile data
-        return user
       },
     }),
   ],

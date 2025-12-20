@@ -1,21 +1,47 @@
 "use client"
 
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { loginSchema, LoginData } from "@/schemas/loginSchema"
+import { login } from "@/app/actions/auth"
 import { FormField } from "./form"
 import { Input } from "./input"
 import { Button } from "./button"
 import { Mail, Key } from "lucide-react"
 
-export function LoginForm({ onSubmit }: { onSubmit: (data: LoginData) => void }) {
-    const { register, handleSubmit } = useForm<LoginData>({
+export function LoginForm() {
+    const [authError, setAuthError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
     })
 
+    const onSubmit = async (data: LoginData) => {
+        setAuthError(null)
+        setIsLoading(true)
+
+        try {
+            const result = await login(data.email, data.password)
+            
+            if (result?.error) {
+                setAuthError(result.error)
+            }
+        } catch {
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} aria-label="Login Form" className="flex flex-col gap-4 w-full">
-            <FormField label="Email" aria-label="Email">
+            {authError && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm">
+                    {authError}
+                </div>
+            )}
+            <FormField label="Email" error={errors.email?.message}>
                 <Input 
                    type="email" 
                    placeholder="Email" 
@@ -23,7 +49,7 @@ export function LoginForm({ onSubmit }: { onSubmit: (data: LoginData) => void })
                    {...register("email")} 
                 />
             </FormField>
-            <FormField label="Password" aria-label="Password">
+            <FormField label="Password" error={errors.password?.message}>
                 <Input 
                    type="password" 
                    placeholder="Password" 
@@ -31,8 +57,9 @@ export function LoginForm({ onSubmit }: { onSubmit: (data: LoginData) => void })
                    {...register("password")} 
                 />
             </FormField>
-            <Button type="submit" size="lg">Login</Button>
+            <Button type="submit" size="lg" disabled={isLoading}>
+                {isLoading ? "Logging in..." : "Login"}
+            </Button>
         </form>
     )
 }
-

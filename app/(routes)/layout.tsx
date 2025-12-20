@@ -1,8 +1,16 @@
-export default function RoutesLayout({
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+
+export default async function RoutesLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
+  if (!session) {
+    return redirect("/");
+  }
   return (
     <div className="h-full">
       {children}
