@@ -28,6 +28,14 @@
     #FFFFFF 50%, 
     #FEF2F2 100%
   );
+
+  --shadow-primary-lg: 0 10px 15px -3px rgba(205, 69, 39, 0.3), 
+                        0 4px 6px -4px rgba(205, 69, 39, 0.3);
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
 }
 
 body {

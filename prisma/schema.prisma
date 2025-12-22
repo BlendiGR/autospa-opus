@@ -15,11 +15,14 @@ model Tyre {
   plate      String    @unique @db.Citext
   location   String?   @db.VarChar(50)
   dateStored DateTime?
+  isStored   Boolean   @default(true)
 
   deletedAt DateTime?
 
-  @@index([dateStored])
   @@index([location])
+  @@index([isStored])
+  @@index([plate])
+  @@index([number])
 }
 
 model Invoices {
@@ -51,6 +54,7 @@ model Customer {
   @@index([email])
   @@index([phone])
   @@index([plate])
+  @@index([company])
 }
 
 model User {

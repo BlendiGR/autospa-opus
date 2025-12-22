@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import NavBar from "@/components/ui/layout/NavBar";
 
 export default async function RoutesLayout({
   children,
@@ -12,7 +13,8 @@ export default async function RoutesLayout({
     return redirect("/");
   }
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
+      <NavBar />
       {children}
     </div>
   );
