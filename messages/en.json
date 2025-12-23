@@ -24,12 +24,15 @@
     "loading": "Loading...",
     "noTyresFound": "No tyres found",
     "page": "Page",
-    "of": "of"
+    "of": "of",
+    "searchPlaceholder": "Search by customer name, plate number, or phonenumber...",
+    "inStorage": "In Storage",
+    "returned": "Returned"
   },
   "TyreCard": {
     "customer": "Customer",
     "plate": "Plate",
-    "tyreNumber": "Tyre Number",
+    "tyreNumber": "Number",
     "storedAt": "Stored at",
     "occupied": "Stored",
     "returned": "Returned",

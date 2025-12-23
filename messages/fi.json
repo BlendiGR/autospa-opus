@@ -24,12 +24,15 @@
     "loading": "Ladataan...",
     "noTyresFound": "Renkaita ei löytynyt",
     "page": "Sivu",
-    "of": "/"
+    "of": "/",
+    "searchPlaceholder": "Hae asiakkaan nimellä, rekisterinumerolla tai puhelin-numerolla...",
+    "inStorage": "Varastossa",
+    "returned": "Palautettu"
   },
   "TyreCard": {
     "customer": "Asiakas",
     "plate": "Rekisterinumero",
-    "tyreNumber": "Rengasnumero",
+    "tyreNumber": "Numero",
     "storedAt": "Säilytetty",
     "occupied": "Säilytetty",
     "returned": "Palautettu",

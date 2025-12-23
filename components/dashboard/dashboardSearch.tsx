@@ -1,6 +1,7 @@
 'use client';
 
 import SearchInput from './searchInput';
+import StorageFilter from './storageFilter';
 import { Package } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Plus } from 'lucide-react';
@@ -31,8 +32,9 @@ export default function DashboardSearch() {
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center w-full">
+            <div className="flex items-center gap-2 w-full">
                 <SearchInput className="bg-white" />
+                <StorageFilter />
             </div>
         </div>
     )

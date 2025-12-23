@@ -24,12 +24,15 @@
     "loading": "Duke ngarkuar...",
     "noTyresFound": "Nuk u gjetën goma",
     "page": "Faqja",
-    "of": "nga"
+    "of": "nga",
+    "searchPlaceholder": "Kërko sipas emrit të klientit, targës, ose numrit të klientit...",
+    "inStorage": "Në Depo",
+    "returned": "Të Kthyera"
   },
   "TyreCard": {
     "customer": "Klienti",
     "plate": "Targa",
-    "tyreNumber": "Numri i Gomës",
+    "tyreNumber": "Numri",
     "storedAt": "Ruajtur më",
     "occupied": "Ruajtur",
     "returned": "E Kthyer",

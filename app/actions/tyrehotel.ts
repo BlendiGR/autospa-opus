@@ -4,7 +4,7 @@ import { prisma } from "@/prisma/prisma";
 
 const PAGE_SIZE = 12;
 
-export async function fetchTyres(query?: string | null, page: number = 1) {
+export async function fetchTyres(query?: string | null, page: number = 1, isStored=true) {
     const skip = (page - 1) * PAGE_SIZE;
     
     const whereClause = {
@@ -20,13 +20,16 @@ export async function fetchTyres(query?: string | null, page: number = 1) {
 
     const [tyres, total] = await Promise.all([
         prisma.tyre.findMany({
-            where: whereClause,
+            where: {
+                ...whereClause,
+                isStored: isStored
+            },
             include: { customer: true },
             orderBy: { dateStored: 'desc' },
             skip,
             take: PAGE_SIZE
         }),
-        prisma.tyre.count({ where: whereClause })
+        prisma.tyre.count({ where: { ...whereClause, isStored: isStored } })
     ]);
 
     return {

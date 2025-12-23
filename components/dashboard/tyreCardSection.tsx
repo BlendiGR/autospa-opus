@@ -11,9 +11,10 @@ export default function TyreCardSection() {
     const searchParams = useSearchParams();
     const query = searchParams.get("query");
     const page = Number(searchParams.get("page")) || 1;
+    const isStored = searchParams.get("stored") !== "false";
     const t = useTranslations('Dashboard');
     
-    const { tyres, pagination, loading } = useTyre(query, page);
+    const { tyres, pagination, loading } = useTyre(query, page, isStored);
 
     return (
         <div>
