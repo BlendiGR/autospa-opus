@@ -6,6 +6,7 @@ import { useTyre } from "@/hooks";
 import Pagination from "../ui/pagination";
 import { useTranslations } from "next-intl";
 import { Spinner } from "../ui/Spinner";
+import { useToggleTyreStatus } from "@/hooks";
 
 export default function TyreCardSection() {
     const searchParams = useSearchParams();
@@ -15,6 +16,7 @@ export default function TyreCardSection() {
     const t = useTranslations('Dashboard');
     
     const { tyres, pagination, loading } = useTyre(query, page, isStored);
+    const { toggle, loading: toggleLoading } = useToggleTyreStatus();
 
     return (
         <div>
@@ -35,7 +37,9 @@ export default function TyreCardSection() {
                             number={tyre.number}
                             location={tyre.location ?? undefined}
                             dateStored={tyre.dateStored}
+                            deletedAt={tyre.deletedAt}
                             isStored={tyre.isStored}
+                            onToggleStatus={() => toggle(tyre.id)}
                         />
                     ))
                 )}

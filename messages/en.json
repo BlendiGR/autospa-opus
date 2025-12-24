@@ -27,13 +27,16 @@
     "of": "of",
     "searchPlaceholder": "Search by customer name, plate number, or phonenumber...",
     "inStorage": "In Storage",
-    "returned": "Returned"
+    "returned": "Returned",
+    "totalTyres": "Total Tyres in Storage",
+    "totalCustomers": "Total Customers"
   },
   "TyreCard": {
     "customer": "Customer",
     "plate": "Plate",
     "tyreNumber": "Number",
     "storedAt": "Stored at",
+    "returnedAt": "Returned at",
     "occupied": "Stored",
     "returned": "Returned",
     "returnButton": "Return",
@@ -46,5 +49,18 @@
     "storeMessage": "Are you sure you want to store the tyres for {plate}?",
     "cancel": "Cancel",
     "confirm": "Confirm"
+  },
+  "AddTyreModal": {
+    "title": "Add New Tyre",
+    "plate": "Plate Number",
+    "phone": "Phone Number",
+    "location": "Location",
+    "locationPlaceholder": "e.g., A1, B2, Shelf 3",
+    "customer": "Customer (Optional)",
+    "noCustomer": "No customer",
+    "cancel": "Cancel",
+    "submit": "Add Tyre",
+    "success": "Tyre added successfully!",
+    "genericError": "Something went wrong"
   }
 }

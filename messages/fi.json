@@ -27,13 +27,16 @@
     "of": "/",
     "searchPlaceholder": "Hae asiakkaan nimellä, rekisterinumerolla tai puhelin-numerolla...",
     "inStorage": "Varastossa",
-    "returned": "Palautettu"
+    "returned": "Palautettu",
+    "totalTyres": "Renkaat Varastossa",
+    "totalCustomers": "Asiakkaita Yhteensä"
   },
   "TyreCard": {
     "customer": "Asiakas",
     "plate": "Rekisterinumero",
     "tyreNumber": "Numero",
     "storedAt": "Säilytetty",
+    "returnedAt": "Palautettu",
     "occupied": "Säilytetty",
     "returned": "Palautettu",
     "returnButton": "Palauta",
@@ -46,5 +49,18 @@
     "storeMessage": "Haluatko varmasti säilyttää renkaat {plate}?",
     "cancel": "Peruuta",
     "confirm": "Vahvista"
+  },
+  "AddTyreModal": {
+    "title": "Lisää Uusi Rengas",
+    "plate": "Rekisterinumero",
+    "phone": "Puhelinnumero",
+    "location": "Sijainti",
+    "locationPlaceholder": "esim., A1, B2, Hylly 3",
+    "customer": "Asiakas (Valinnainen)",
+    "noCustomer": "Ei asiakasta",
+    "cancel": "Peruuta",
+    "submit": "Lisää Rengas",
+    "success": "Rengas lisätty onnistuneesti!",
+    "genericError": "Jotain meni pieleen"
   }
 }

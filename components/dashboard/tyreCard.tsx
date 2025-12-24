@@ -13,8 +13,9 @@ interface TyreCardProps {
     number: string;
     location?: string;
     dateStored?: Date | null;
+    deletedAt?: Date | null;
     isStored: boolean;
-    onToggleStatus?: (id: number, currentStatus: boolean) => void;
+    onToggleStatus?: (id: number) => Promise<{ success: boolean; error?: string }>;
 }
 
 export default function TyreCard({ 
@@ -23,7 +24,8 @@ export default function TyreCard({
     plate, 
     number,
     location,
-    dateStored, 
+    dateStored,
+    deletedAt,
     isStored,
     onToggleStatus
 }: TyreCardProps) {
@@ -31,8 +33,9 @@ export default function TyreCard({
     const t = useTranslations('TyreCard');
     const tConfirm = useTranslations('ConfirmDialog');
     
-    const formattedDate = dateStored 
-        ? new Date(dateStored).toLocaleDateString('fi-FI')
+    const displayDate = isStored ? dateStored : deletedAt;
+    const formattedDate = displayDate 
+        ? new Date(displayDate).toLocaleDateString('fi-FI')
         : '—';
 
     return (
@@ -68,7 +71,7 @@ export default function TyreCard({
 
             <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
                 <div>
-                    <p className="text-sm text-gray-400">{t('storedAt')}</p>
+                    <p className="text-sm text-gray-400">{isStored ? t('storedAt') : t('returnedAt')}</p>
                     <p className="text-lg font-semibold text-gray-900">{formattedDate}</p>
                 </div>
                 <Button
@@ -94,7 +97,7 @@ export default function TyreCard({
             <ConfirmDialog
                 isOpen={showConfirm}
                 onClose={() => setShowConfirm(false)}
-                onConfirm={() => onToggleStatus?.(id, isStored)}
+                onConfirm={() => onToggleStatus?.(id)}
                 title={isStored ? tConfirm('returnTitle') : tConfirm('storeTitle')}
                 message={isStored 
                     ? tConfirm('returnMessage', { plate })

@@ -27,13 +27,16 @@
     "of": "nga",
     "searchPlaceholder": "Kërko sipas emrit të klientit, targës, ose numrit të klientit...",
     "inStorage": "Në Depo",
-    "returned": "Të Kthyera"
+    "returned": "Të Kthyera",
+    "totalTyres": "Goma Totale në Depo",
+    "totalCustomers": "Klientë Totalë"
   },
   "TyreCard": {
     "customer": "Klienti",
     "plate": "Targa",
     "tyreNumber": "Numri",
     "storedAt": "Ruajtur më",
+    "returnedAt": "Kthyer më",
     "occupied": "Ruajtur",
     "returned": "E Kthyer",
     "returnButton": "Kthe",
@@ -46,5 +49,18 @@
     "storeMessage": "A jeni i sigurt që dëshironi t'i ruani gomat për {plate}?",
     "cancel": "Anulo",
     "confirm": "Konfirmo"
+  },
+  "AddTyreModal": {
+    "title": "Shto Goma të Reja",
+    "plate": "Numri i Targës",
+    "phone": "Numri i Telefonit",
+    "location": "Vendndodhja",
+    "locationPlaceholder": "p.sh., A1, B2, Rafti 3",
+    "customer": "Klienti (Opsional)",
+    "noCustomer": "Pa klient",
+    "cancel": "Anulo",
+    "submit": "Shto Gomën",
+    "success": "Goma u shtua me sukses!",
+    "genericError": "Diçka shkoi keq"
   }
 }

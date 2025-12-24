@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import NavBar from "@/components/layout/NavBar";
+import Footer from "@/components/layout/Footer";
 
 export default async function RoutesLayout({
   children,
@@ -13,9 +14,10 @@ export default async function RoutesLayout({
     return redirect("/");
   }
   return (
-    <div className="h-full w-full">
+    <div className="min-h-screen flex flex-col">
       <NavBar />
-      {children}
+      <main className="flex-1">{children}</main>
+      <Footer />
     </div>
   );
 }
