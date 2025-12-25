@@ -8,6 +8,7 @@
  */
 
 import { prisma } from "@/prisma/prisma";
+import { tyreSchema } from "@/lib/schemas/tyreSchema";
 
 /** Number of items per page for pagination */
 const PAGE_SIZE = 12;
@@ -139,13 +140,17 @@ interface CreateTyreInput {
  * @returns Object indicating success/failure and the created tyre or error message
  */
 export async function createTyre(data: CreateTyreInput) {
+  const validatedData = tyreSchema.safeParse(data);
+  if (!validatedData.success) {
+    return { success: false, error: "Invalid data" };
+  }
   try {
     const tyre = await prisma.tyre.create({
       data: {
-        plate: data.plate.toUpperCase(),
-        number: data.number,
-        location: data.location,
-        customerId: data.customerId ?? null,
+        plate: validatedData.data.plate.toUpperCase(),
+        number: validatedData.data.number,
+        location: validatedData.data.location,
+        customerId: validatedData.data.customerId ?? null,
         dateStored: new Date(),
         isStored: true,
       },
