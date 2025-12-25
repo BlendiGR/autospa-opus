@@ -3,27 +3,48 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import ForgotPasswordForm from "@/components/login/ForgotPasswordForm";
 import ForgotPasswordCodeConfirmForm from "@/components/login/ForgotPasswordCodeConfirmForm";
 import { forgotPassword } from "@/app/actions/forgotpassword";
+import { verifyResetCode } from "@/app/actions/verifyResetCode";
+import { useLoading } from "@/hooks";
 
 export default function ForgotPasswordClient() {
   const t = useTranslations("ForgotPassword");
+  const router = useRouter();
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const { startLoading, stopLoading, loading } = useLoading();
 
   const handleSendForgotPassEmail = async (data: { email: string }) => {
+    startLoading();
+    setError(null);
     const result = await forgotPassword(data.email);
     if (result.success) {
       setEmail(data.email);
       setIsEmailSent(true);
+      stopLoading();
+    } else {
+      setError(result.message);
+      stopLoading();
     }
   };
 
   const handleForgotPassCodeConfirm = async (data: { code: string }) => {
-    // TODO: Implement code verification logic
-    console.log("Code submitted:", data.code);
+    startLoading();
+    setError(null);
+    const result = await verifyResetCode(email, data.code);
+    
+    if (result.success && result.resetToken) {
+      // Redirect to reset password page with the UUID token
+      router.push(`/reset-password/${result.resetToken}`);
+    } else {
+      setError(result.message);
+      stopLoading();
+    }
   };
 
   return (
@@ -47,12 +68,18 @@ export default function ForgotPasswordClient() {
             <p className="text-sm text-white">{t("subtitle")}</p>
           </div>
           <div className="pt-30 w-full">
+            {error && (
+              <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             {!isEmailSent ? (
-              <ForgotPasswordForm onSubmitEmail={handleSendForgotPassEmail} />
+              <ForgotPasswordForm onSubmitEmail={handleSendForgotPassEmail} loading={loading} />
             ) : (
               <ForgotPasswordCodeConfirmForm 
                 onSubmitCode={handleForgotPassCodeConfirm} 
                 email={email}
+                loading={loading}
               />
             )}
           </div>

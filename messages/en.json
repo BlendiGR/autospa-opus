@@ -77,5 +77,26 @@
     "submit": "Add Tyre",
     "success": "Tyre added successfully!",
     "genericError": "Something went wrong"
+  },
+  "ResetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your new password below",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "submit": "Reset Password",
+    "loading": "Resetting...",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordRequirements": "Password must contain uppercase, number, and special character",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordHint": "Password must be at least 8 characters with uppercase, number, and special character (!@#$%^&*)",
+    "successTitle": "Password Reset!",
+    "successMessage": "Your password has been reset successfully.",
+    "redirecting": "Redirecting to login...",
+    "resettingFor": "Resetting password for",
+    "genericError": "Something went wrong. Please try again.",
+    "invalidToken": "Invalid or expired reset link",
+    "tokenExpired": "This reset link has expired"
   }
 }

@@ -12,13 +12,8 @@ const locales = [
 export default function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [currentLocale, setCurrentLocale] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
-
-  const getCurrentLocale = () => {
-    if (typeof document === "undefined") return "en";
-    const match = document.cookie.match(/locale=([^;]+)/);
-    return match ? match[1] : "en";
-  };
 
   const handleSelect = (code: string) => {
     setIsOpen(false);
@@ -29,6 +24,10 @@ export default function LanguageSwitcher() {
   };
 
   useEffect(() => {
+    // Read locale from cookie only on client to avoid hydration mismatch
+    const match = document.cookie.match(/locale=([^;]+)/);
+    setCurrentLocale(match ? match[1] : "en");
+
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setIsOpen(false);
@@ -56,7 +55,7 @@ export default function LanguageSwitcher() {
               key={locale.code}
               onClick={() => handleSelect(locale.code)}
               className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
-                getCurrentLocale() === locale.code ? "font-semibold bg-gray-50" : ""
+                currentLocale === locale.code ? "font-semibold bg-gray-50" : ""
               }`}
             >
               {locale.name}
@@ -67,3 +66,4 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
+

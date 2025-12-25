@@ -18,10 +18,12 @@ type ForgotPasswordData = z.infer<ReturnType<typeof createForgotPasswordSchema>>
 
 export default function ForgotPasswordCodeConfirmForm({ 
   onSubmitCode,
-  email 
+  email,
+  loading
 }: { 
   onSubmitCode: (data: ForgotPasswordData) => void | Promise<void>;
   email: string;
+  loading: boolean;
 }) {
   const t = useTranslations("ForgotPassword");
   const router = useRouter();
@@ -54,7 +56,7 @@ export default function ForgotPasswordCodeConfirmForm({
           {...register("code")}
         />
       </FormField>
-      <Button type="submit" size="lg">
+      <Button type="submit" size="lg" disabled={loading}>
         {t("verifyCode")}
       </Button>
       <Button 

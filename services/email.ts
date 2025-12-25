@@ -36,7 +36,7 @@ export const sendEmail = async ({
   const emailHtml = await render(component);
 
   return transport.sendMail({
-    from: "info@autospaopus.com",
+    from: "Autospa Opus <blendigrajqevci@gmail.com>",
     to: to,
     subject: subject,
     html: emailHtml,

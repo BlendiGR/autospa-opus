@@ -2,8 +2,12 @@ import { auth } from "@/auth";
 
 export default auth((req) => {
   const publicRoutes = ["/", "/forgot-password"];
+  const publicPrefixes = ["/reset-password"]; 
   
-  if (!req.auth && !publicRoutes.includes(req.nextUrl.pathname)) {
+  const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname) ||
+    publicPrefixes.some(prefix => req.nextUrl.pathname.startsWith(prefix));
+
+  if (!req.auth && !isPublicRoute) {
     const newUrl = new URL("/", req.nextUrl.origin);
     return Response.redirect(newUrl);
   }

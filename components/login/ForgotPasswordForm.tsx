@@ -11,15 +11,17 @@ import { Button } from "../ui/button";
 import { Mail, ArrowLeft } from "lucide-react";
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
 });
 
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordForm({ 
-  onSubmitEmail 
+  onSubmitEmail,
+  loading
 }: { 
-  onSubmitEmail: (data: ForgotPasswordData) => void | Promise<void>
+  onSubmitEmail: (data: ForgotPasswordData) => void | Promise<void>;
+  loading: boolean;
 }) {
   const t = useTranslations("ForgotPassword");
   const router = useRouter();
@@ -42,7 +44,7 @@ export default function ForgotPasswordForm({
           {...register("email")}
         />
       </FormField>
-      <Button type="submit" size="lg">
+      <Button type="submit" size="lg" disabled={loading}>
         {t("submit")}
       </Button>
       <Button 

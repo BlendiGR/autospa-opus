@@ -77,5 +77,26 @@
     "submit": "Lisää Rengas",
     "success": "Rengas lisätty onnistuneesti!",
     "genericError": "Jotain meni pieleen"
+  },
+  "ResetPassword": {
+    "title": "Vaihda Salasana",
+    "subtitle": "Syötä uusi salasanasi alle",
+    "newPassword": "Uusi Salasana",
+    "newPasswordPlaceholder": "Syötä uusi salasana",
+    "confirmPassword": "Vahvista Salasana",
+    "confirmPasswordPlaceholder": "Vahvista uusi salasana",
+    "submit": "Vaihda Salasana",
+    "loading": "Vaihdetaan...",
+    "passwordMinLength": "Salasanan tulee olla vähintään 8 merkkiä",
+    "passwordRequirements": "Salasanassa tulee olla iso kirjain, numero ja erikoismerkki",
+    "passwordsDoNotMatch": "Salasanat eivät täsmää",
+    "passwordHint": "Salasanan tulee olla vähintään 8 merkkiä, sisältäen ison kirjaimen, numeron ja erikoismerkin (!@#$%^&*)",
+    "successTitle": "Salasana Vaihdettu!",
+    "successMessage": "Salasanasi on vaihdettu onnistuneesti.",
+    "redirecting": "Ohjataan kirjautumiseen...",
+    "resettingFor": "Vaihdetaan salasana käyttäjälle",
+    "genericError": "Jotain meni pieleen. Yritä uudelleen.",
+    "invalidToken": "Virheellinen tai vanhentunut palautuslinkki",
+    "tokenExpired": "Tämä palautuslinkki on vanhentunut"
   }
 }

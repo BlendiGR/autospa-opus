@@ -18,7 +18,14 @@
     "subtitle": "Sheno email-in e llogaritës tuaj, nëse është i ekzistuar, po dërgojme kod për resetimin e fjalëkalimit.",
     "email": "Email",
     "submit": "Dërgo Kodin e Resetimit",
-    "backToLogin": "Kthehu tek Hyrja"
+    "backToLogin": "Kthehu tek Hyrja",
+    "codeLabel": "Kodi i Verifikimit",
+    "codePlaceholder": "Sheno kodin 6-shifror",
+    "verifyCode": "Verifiko Kodin",
+    "codeInvalid": "Kod i pavlefshëm",
+    "codeMinLength": "Kodi duhet të jetë 6 karaktere",
+    "codeMaxLength": "Kodi duhet të jetë 6 karaktere",
+    "codeSentTo": "Sheno kodin që u dërgua në:"
   },
   "Pages": {
     "dashboard": "Paneli",
@@ -70,5 +77,26 @@
     "submit": "Shto Gomën",
     "success": "Goma u shtua me sukses!",
     "genericError": "Diçka shkoi keq"
+  },
+  "ResetPassword": {
+    "title": "Ndrysho Fjalëkalimin",
+    "subtitle": "Sheno fjalëkalimin e ri më poshtë",
+    "newPassword": "Fjalëkalimi i Ri",
+    "newPasswordPlaceholder": "Sheno fjalëkalimin e ri",
+    "confirmPassword": "Konfirmo Fjalëkalimin",
+    "confirmPasswordPlaceholder": "Konfirmo fjalëkalimin e ri",
+    "submit": "Ndrysho Fjalëkalimin",
+    "loading": "Duke ndryshuar...",
+    "passwordMinLength": "Fjalëkalimi duhet të jetë së paku 8 karaktere",
+    "passwordRequirements": "Fjalëkalimi duhet të ketë shkronjë të madhe, numër dhe karakter special",
+    "passwordsDoNotMatch": "Fjalëkalimet nuk përputhen",
+    "passwordHint": "Fjalëkalimi duhet të jetë së paku 8 karaktere me shkronjë të madhe, numër dhe karakter special (!@#$%^&*)",
+    "successTitle": "Fjalëkalimi u Ndryshua!",
+    "successMessage": "Fjalëkalimi juaj u ndryshua me sukses.",
+    "redirecting": "Duke ju ridrejtuar tek hyrja...",
+    "resettingFor": "Duke ndryshuar fjalëkalimin për",
+    "genericError": "Diçka shkoi keq. Ju lutem provoni përsëri.",
+    "invalidToken": "Link i pavlefshëm ose i skaduar",
+    "tokenExpired": "Ky link i resetimit ka skaduar"
   }
 }

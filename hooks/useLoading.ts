@@ -20,5 +20,13 @@ export function useLoading(initialState: boolean = false) {
     }
   }, []);
 
-  return { loading, setLoading, withLoading };
+  const startLoading = useCallback(() => {
+    setLoading(true);
+  }, []);
+
+  const stopLoading = useCallback(() => {
+    setLoading(false);
+  }, []);
+
+  return { loading, setLoading, withLoading, startLoading, stopLoading };
 }
