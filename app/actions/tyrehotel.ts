@@ -1,17 +1,8 @@
 "use server";
 
-/**
- * Tyre Hotel Server Actions
- *
- * This file contains server-side actions for managing the Tyre Hotel feature,
- * including fetching, creating, and updating tyre storage records.
- */
-
 import { prisma } from "@/prisma/prisma";
 import { tyreSchema } from "@/lib/schemas/tyreSchema";
-
-/** Number of items per page for pagination */
-const PAGE_SIZE = 12;
+import { PAGE_SIZE } from "@/lib/constants";
 
 /**
  * Fetches a paginated list of tyres based on search criteria.

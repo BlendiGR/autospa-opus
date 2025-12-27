@@ -1,12 +1,5 @@
 "use server";
 
-/**
- * Authentication Server Actions
- *
- * This file contains server-side actions for managing user authentication,
- * including login and logout functionality using NextAuth.
- */
-
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 

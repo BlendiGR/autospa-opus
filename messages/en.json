@@ -98,5 +98,15 @@
     "genericError": "Something went wrong. Please try again.",
     "invalidToken": "Invalid or expired reset link",
     "tokenExpired": "This reset link has expired"
+  },
+  "PasswordEmail": {
+    "preview": "Your password reset code:",
+    "greeting": "Hello,",
+    "description": "We received a request to reset your password. Use the code below to complete the process.",
+    "verificationCodeLabel": "Your verification code",
+    "expiresIn": "This code expires in",
+    "tenMinutes": "10 minutes",
+    "ignoreMessage": "If you didn't request this password reset, you can safely ignore this email. Your account remains secure.",
+    "copyright": "All rights reserved."
   }
 }

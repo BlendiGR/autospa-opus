@@ -12,10 +12,10 @@ interface ResetPasswordClientProps {
   userName: string | null;
 }
 
-export default function ResetPasswordClient({ 
-  resetToken, 
+export default function ResetPasswordClient({
+  resetToken,
   userEmail,
-  userName 
+  userName,
 }: ResetPasswordClientProps) {
   const t = useTranslations("ResetPassword");
   const router = useRouter();
@@ -50,7 +50,12 @@ export default function ResetPasswordClient({
     return (
       <div className="flex flex-col items-center gap-4 text-center">
         <div className="rounded-full bg-green-100 p-3">
-          <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="h-8 w-8 text-green-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
@@ -68,7 +73,7 @@ export default function ResetPasswordClient({
           {t("resettingFor")} <span className="font-medium">{userName}</span>
         </p>
       )}
-      
+
       {error && (
         <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
           {error}

@@ -37,7 +37,7 @@ export default function ForgotPasswordClient() {
     startLoading();
     setError(null);
     const result = await verifyResetCode(email, data.code);
-    
+
     if (result.success && result.resetToken) {
       // Redirect to reset password page with the UUID token
       router.push(`/reset-password/${result.resetToken}`);
@@ -76,8 +76,8 @@ export default function ForgotPasswordClient() {
             {!isEmailSent ? (
               <ForgotPasswordForm onSubmitEmail={handleSendForgotPassEmail} loading={loading} />
             ) : (
-              <ForgotPasswordCodeConfirmForm 
-                onSubmitCode={handleForgotPassCodeConfirm} 
+              <ForgotPasswordCodeConfirmForm
+                onSubmitCode={handleForgotPassCodeConfirm}
                 email={email}
                 loading={loading}
               />

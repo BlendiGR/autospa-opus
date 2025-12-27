@@ -1,21 +1,45 @@
-"use server"
+"use server";
 
 import { prisma } from "@/prisma/prisma";
 import { sendEmail } from "@/services/email";
-import PasswordChangeCode from "@/components/emails/PasswordChangeCode";
+import PasswordChangeCode, { EmailTranslations } from "@/components/emails/PasswordChangeCode";
 import crypto from "crypto";
+import { cookies } from "next/headers";
+import { RESET_TOKEN_EXPIRY_MS } from "@/lib/constants";
 
 /**
- * Generates a cryptographically secure 6-digit code
+ * Generates a cryptographically secure 6-digit code.
+ *
+ * @returns A 6-digit string code
  */
 function generateSecureCode(): string {
-  // Generate a random 6-digit number (100000 to 999999)
   const code = crypto.randomInt(100000, 1000000);
   return code.toString();
 }
 
+/**
+ * Retrieves email translations based on the user's locale.
+ *
+ * @param locale - The locale code (e.g., "en", "fi", "sq")
+ * @returns Promise resolving to the email translations object
+ */
+async function getEmailTranslations(locale: string): Promise<EmailTranslations> {
+  try {
+    const messages = (await import(`@/messages/${locale}.json`)).default;
+    return messages.PasswordEmail;
+  } catch {
+    const messages = (await import(`@/messages/en.json`)).default;
+    return messages.PasswordEmail;
+  }
+}
+
+/**
+ * Initiates the password reset flow for a user.
+ *
+ * @param email - The email address of the user requesting a password reset
+ * @returns Object with success status and message
+ */
 export async function forgotPassword(email: string) {
-  // Find user by email
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -25,13 +49,9 @@ export async function forgotPassword(email: string) {
     return { success: true, message: "If the email exists, a reset code has been sent." };
   }
 
-  // Generate secure 6-digit code
   const code = generateSecureCode();
-  
-  // Set expiration to 10 minutes from now
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+  const expiresAt = new Date(Date.now() + RESET_TOKEN_EXPIRY_MS);
 
-  // Store the code in database
   await prisma.passwordResetToken.create({
     data: {
       token: code,
@@ -40,14 +60,18 @@ export async function forgotPassword(email: string) {
     },
   });
 
-  // Send email with the code
+  const store = await cookies();
+  const locale = store.get("locale")?.value || "en";
+  const translations = await getEmailTranslations(locale);
+
   try {
     await sendEmail({
       to: email,
       subject: "Password Reset Code - AutoSpa Opus",
-      component: PasswordChangeCode({ 
-        name: user.name || "User", 
-        code 
+      component: PasswordChangeCode({
+        name: user.name || "User",
+        code,
+        translations,
       }),
     });
 

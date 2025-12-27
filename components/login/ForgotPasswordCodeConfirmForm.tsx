@@ -10,24 +10,25 @@ import { FormField } from "../ui/form";
 import { Button } from "../ui/button";
 import { Mail, ArrowLeft } from "lucide-react";
 
-const createForgotPasswordSchema = (t: (key: string) => string) => z.object({
-  code: z.string(t("codeInvalid")).min(6, t("codeMinLength")).max(6, t("codeMaxLength")),
-});
+const createForgotPasswordSchema = (t: (key: string) => string) =>
+  z.object({
+    code: z.string(t("codeInvalid")).min(6, t("codeMinLength")).max(6, t("codeMaxLength")),
+  });
 
 type ForgotPasswordData = z.infer<ReturnType<typeof createForgotPasswordSchema>>;
 
-export default function ForgotPasswordCodeConfirmForm({ 
+export default function ForgotPasswordCodeConfirmForm({
   onSubmitCode,
   email,
-  loading
-}: { 
+  loading,
+}: {
   onSubmitCode: (data: ForgotPasswordData) => void | Promise<void>;
   email: string;
   loading: boolean;
 }) {
   const t = useTranslations("ForgotPassword");
   const router = useRouter();
-  
+
   const forgotPasswordSchema = createForgotPasswordSchema(t);
 
   const {
@@ -41,12 +42,8 @@ export default function ForgotPasswordCodeConfirmForm({
   return (
     <form onSubmit={handleSubmit(onSubmitCode)} className="flex flex-col gap-4 w-full">
       <div className="mb-2">
-        <p className="text-sm text-gray-600">
-          {t("codeSentTo")}
-        </p>
-        <p className="text-sm font-medium text-gray-900">
-          {email}
-        </p>
+        <p className="text-sm text-gray-600">{t("codeSentTo")}</p>
+        <p className="text-sm font-medium text-gray-900">{email}</p>
       </div>
       <FormField label={t("codeLabel")} error={errors.code?.message}>
         <Input
@@ -59,10 +56,10 @@ export default function ForgotPasswordCodeConfirmForm({
       <Button type="submit" size="lg" disabled={loading}>
         {t("verifyCode")}
       </Button>
-      <Button 
-        type="button" 
-        variant="link" 
-        size="link" 
+      <Button
+        type="button"
+        variant="link"
+        size="link"
         onClick={() => router.push("/")}
         className="flex items-center gap-2 text-primary"
       >

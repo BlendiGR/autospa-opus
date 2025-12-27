@@ -98,5 +98,15 @@
     "genericError": "Diçka shkoi keq. Ju lutem provoni përsëri.",
     "invalidToken": "Link i pavlefshëm ose i skaduar",
     "tokenExpired": "Ky link i resetimit ka skaduar"
+  },
+  "PasswordEmail": {
+    "preview": "Kodi juaj i resetimit të fjalëkalimit:",
+    "greeting": "Përshëndetje,",
+    "description": "Kemi marrë një kërkesë për të ndryshuar fjalëkalimin tuaj. Përdorni kodin më poshtë për të përfunduar procesin.",
+    "verificationCodeLabel": "Kodi juaj i verifikimit",
+    "expiresIn": "Ky kod skadon brenda",
+    "tenMinutes": "10 minutave",
+    "ignoreMessage": "Nëse nuk e keni kërkuar këtë ndryshim të fjalëkalimit, mund ta injoroni këtë email me siguri. Llogaria juaj mbetet e sigurt.",
+    "copyright": "Të gjitha të drejtat e rezervuara."
   }
 }

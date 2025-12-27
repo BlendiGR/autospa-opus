@@ -1,3 +1,8 @@
+/**
+ * Navigation Configuration
+ *
+ * This file defines the navigation links for the app.
+ */
 export const navItems = [
   {
     key: "dashboard",

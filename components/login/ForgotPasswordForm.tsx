@@ -16,16 +16,16 @@ const forgotPasswordSchema = z.object({
 
 type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
 
-export default function ForgotPasswordForm({ 
+export default function ForgotPasswordForm({
   onSubmitEmail,
-  loading
-}: { 
+  loading,
+}: {
   onSubmitEmail: (data: ForgotPasswordData) => void | Promise<void>;
   loading: boolean;
 }) {
   const t = useTranslations("ForgotPassword");
   const router = useRouter();
-  
+
   const {
     register,
     handleSubmit,
@@ -47,10 +47,10 @@ export default function ForgotPasswordForm({
       <Button type="submit" size="lg" disabled={loading}>
         {t("submit")}
       </Button>
-      <Button 
-        type="button" 
-        variant="link" 
-        size="link" 
+      <Button
+        type="button"
+        variant="link"
+        size="link"
         onClick={() => router.push("/")}
         className="flex items-center gap-2 text-primary"
       >

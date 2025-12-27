@@ -3,8 +3,14 @@
 import { prisma } from "@/prisma/prisma";
 import { saltAndHashPassword } from "@/lib/utils/saltAndHashPassword";
 
+/**
+ * Resets the user's password using a valid reset token.
+ *
+ * @param resetToken - The UUID token from the password reset URL
+ * @param newPassword - The new password to set
+ * @returns Object with success status and message
+ */
 export async function resetPassword(resetToken: string, newPassword: string) {
-  // Find the password reset token record
   const tokenRecord = await prisma.passwordResetToken.findUnique({
     where: { resetToken },
     include: { user: true },
@@ -14,9 +20,7 @@ export async function resetPassword(resetToken: string, newPassword: string) {
     return { success: false, message: "Invalid reset token." };
   }
 
-  // Check if token has expired
   if (tokenRecord.expiresAt < new Date()) {
-    // Delete expired token
     await prisma.passwordResetToken.delete({
       where: { id: tokenRecord.id },
     });
@@ -25,7 +29,6 @@ export async function resetPassword(resetToken: string, newPassword: string) {
 
   const hashedPassword = saltAndHashPassword(newPassword);
 
-  // Update user password and delete the token (transaction)
   await prisma.$transaction([
     prisma.user.update({
       where: { id: tokenRecord.userId },
@@ -39,7 +42,12 @@ export async function resetPassword(resetToken: string, newPassword: string) {
   return { success: true, message: "Password reset successfully." };
 }
 
-// Validate reset token (for page server-side check)
+/**
+ * Validates a password reset token for page rendering.
+ *
+ * @param resetToken - The UUID token from the password reset URL
+ * @returns Object with validation status and user info
+ */
 export async function validateResetToken(resetToken: string) {
   const tokenRecord = await prisma.passwordResetToken.findUnique({
     where: { resetToken },
@@ -54,8 +62,8 @@ export async function validateResetToken(resetToken: string) {
     return { valid: false, email: null, expired: true };
   }
 
-  return { 
-    valid: true, 
+  return {
+    valid: true,
     email: tokenRecord.user.email,
     name: tokenRecord.user.name,
   };

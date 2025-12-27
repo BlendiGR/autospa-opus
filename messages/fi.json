@@ -98,5 +98,15 @@
     "genericError": "Jotain meni pieleen. Yritä uudelleen.",
     "invalidToken": "Virheellinen tai vanhentunut palautuslinkki",
     "tokenExpired": "Tämä palautuslinkki on vanhentunut"
+  },
+  "PasswordEmail": {
+    "preview": "Salasanan palautuskoodisi:",
+    "greeting": "Hei,",
+    "description": "Saimme pyynnön salasanasi vaihtamiseksi. Käytä alla olevaa koodia prosessin suorittamiseen.",
+    "verificationCodeLabel": "Vahvistuskoodisi",
+    "expiresIn": "Tämä koodi vanhenee",
+    "tenMinutes": "10 minuutissa",
+    "ignoreMessage": "Jos et pyytänyt salasanan vaihtoa, voit turvallisesti jättää tämän sähköpostin huomiotta. Tilisi on turvassa.",
+    "copyright": "Kaikki oikeudet pidätetään."
   }
 }
