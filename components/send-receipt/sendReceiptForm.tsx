@@ -15,6 +15,7 @@ import InvoicePreview from "./invoicePreview";
 
 import { useLoading } from "@/hooks";
 import { receiptSchema, ReceiptFormData } from "@/lib/schemas/receiptSchema";
+import { sendReceipt } from "@/app/actions/sendReceipt";
 
 function generateId() {
   return Math.random().toString(36).substring(2, 9);
@@ -69,12 +70,7 @@ export default function SendReceiptForm() {
 
     await withLoading(async () => {
       try {
-        // TODO: Implement the actual send receipt action
-        console.log("Sending receipt:", data);
-
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
+        await sendReceipt(data);
         setSuccess(true);
         setTimeout(() => {
           setSuccess(false);
@@ -107,13 +103,11 @@ export default function SendReceiptForm() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Form Section */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="h-1 bg-gradient-to-r from-primary to-primaryhover" />
+          <div className="h-1 bg-linear-to-r from-primary to-primaryhover" />
 
           <div className="p-6">
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">
-                {t("title")}
-              </h2>
+              <h2 className="text-xl font-semibold text-gray-900">{t("title")}</h2>
               <p className="text-sm text-gray-500 mt-1">{t("subtitle")}</p>
             </div>
 
@@ -130,9 +124,7 @@ export default function SendReceiptForm() {
                   className={errors.email ? "border-red-500" : ""}
                 />
                 {errors.email && (
-                  <span className="text-xs text-red-500">
-                    {errors.email.message}
-                  </span>
+                  <span className="text-xs text-red-500">{errors.email.message}</span>
                 )}
               </div>
 
@@ -140,9 +132,7 @@ export default function SendReceiptForm() {
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="customerName">
                   {t("customerName")}{" "}
-                  <span className="text-gray-400 font-normal">
-                    ({t("optional")})
-                  </span>
+                  <span className="text-gray-400 font-normal">({t("optional")})</span>
                 </Label>
                 <Input
                   id="customerName"
@@ -159,13 +149,15 @@ export default function SendReceiptForm() {
                   id="plate"
                   placeholder="ABC-123"
                   startIcon={<Car className="w-4 h-4" />}
-                  {...register("plate")}
+                  {...register("plate", {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.toUpperCase();
+                    },
+                  })}
                   className={errors.plate ? "border-red-500" : ""}
                 />
                 {errors.plate && (
-                  <span className="text-xs text-red-500">
-                    {errors.plate.message}
-                  </span>
+                  <span className="text-xs text-red-500">{errors.plate.message}</span>
                 )}
               </div>
 
@@ -213,9 +205,7 @@ export default function SendReceiptForm() {
                 </div>
 
                 {errors.items?.message && (
-                  <span className="text-xs text-red-500">
-                    {errors.items.message}
-                  </span>
+                  <span className="text-xs text-red-500">{errors.items.message}</span>
                 )}
               </div>
 
@@ -261,6 +251,7 @@ export default function SendReceiptForm() {
             total: t("total"),
             noItems: t("noItems"),
             thankYou: t("thankYou"),
+            footer: t("footer"),
           }}
         />
       </div>

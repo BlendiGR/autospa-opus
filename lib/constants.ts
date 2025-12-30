@@ -6,3 +6,7 @@ export const RESET_TOKEN_EXPIRY_MS = 10 * 60 * 1000;
 
 /** App name used in emails and UI */
 export const APP_NAME = "AutoSpa Opus";
+
+/** Base URL for the application (used for generating absolute URLs) */
+export const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";

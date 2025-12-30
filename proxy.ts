@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 
 /** Routes accessible without authentication */
-const publicRoutes = ["/", "/forgot-password"];
+const publicRoutes = ["/", "/forgot-password", "/test-auth"];
 
 /** Route prefixes accessible without authentication */
 const publicPrefixes = ["/reset-password"];

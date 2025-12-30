@@ -2,9 +2,11 @@
 
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 /**
  * Authenticates a user with email and password credentials.
+ * Rate limited to 5 attempts per minute per IP.
  *
  * @param email - User's email address
  * @param password - User's password
@@ -12,6 +14,9 @@ import { AuthError } from "next-auth";
  * @throws Rethrows non-AuthError exceptions
  */
 export async function login(email: string, password: string) {
+  const limit = await checkRateLimit("auth");
+  if (!limit.success) return { error: limit.error };
+
   try {
     await signIn("credentials", {
       email,
@@ -39,3 +44,4 @@ export async function login(email: string, password: string) {
 export async function logout() {
   await signOut({ redirectTo: "/" });
 }
+

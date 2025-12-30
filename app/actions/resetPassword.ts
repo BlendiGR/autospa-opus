@@ -2,15 +2,20 @@
 
 import { prisma } from "@/prisma/prisma";
 import { saltAndHashPassword } from "@/lib/utils/saltAndHashPassword";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 /**
  * Resets the user's password using a valid reset token.
+ * Rate limited to 5 requests per minute.
  *
  * @param resetToken - The UUID token from the password reset URL
  * @param newPassword - The new password to set
  * @returns Object with success status and message
  */
 export async function resetPassword(resetToken: string, newPassword: string) {
+  const limit = await checkRateLimit("auth");
+  if (!limit.success) return { success: false, message: limit.error };
+
   const tokenRecord = await prisma.passwordResetToken.findUnique({
     where: { resetToken },
     include: { user: true },

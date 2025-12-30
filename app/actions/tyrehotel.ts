@@ -3,6 +3,7 @@
 import { prisma } from "@/prisma/prisma";
 import { tyreSchema } from "@/lib/schemas/tyreSchema";
 import { PAGE_SIZE } from "@/lib/constants";
+import { requireAuth } from "@/lib/auth-utils";
 
 /**
  * Fetches a paginated list of tyres based on search criteria.
@@ -13,6 +14,8 @@ import { PAGE_SIZE } from "@/lib/constants";
  * @returns Object containing paginated tyre records and pagination metadata
  */
 export async function fetchTyres(query?: string | null, page: number = 1, isStored = true) {
+  await requireAuth();
+
   const skip = (page - 1) * PAGE_SIZE;
 
   const whereClause = {
@@ -56,6 +59,8 @@ export async function fetchTyres(query?: string | null, page: number = 1, isStor
  * @returns Object containing counts by location and total count
  */
 export async function tyreCounts() {
+  await requireAuth();
+
   const byLocation = await prisma.tyre.groupBy({
     by: ["location"],
     _count: { id: true },
@@ -86,6 +91,8 @@ export async function tyreCounts() {
  * @returns Total customer count
  */
 export async function customerCount() {
+  await requireAuth();
+
   const count = await prisma.customer.count();
   return count;
 }
@@ -96,6 +103,8 @@ export async function customerCount() {
  * @returns Array of customers with id, name, and plate
  */
 export async function fetchCustomers() {
+  await requireAuth();
+
   const customers = await prisma.customer.findMany({
     select: { id: true, name: true, plate: true },
     orderBy: { name: "asc" },
@@ -109,6 +118,8 @@ export async function fetchCustomers() {
  * @returns Array of distinct location strings
  */
 export async function fetchLocations() {
+  await requireAuth();
+
   const locations = await prisma.tyre.findMany({
     where: { location: { not: null } },
     select: { location: true },
@@ -131,6 +142,8 @@ interface CreateTyreInput {
  * @returns Object indicating success/failure and the created tyre or error message
  */
 export async function createTyre(data: CreateTyreInput) {
+  await requireAuth();
+
   const validatedData = tyreSchema.safeParse(data);
   if (!validatedData.success) {
     return { success: false, error: "Invalid data" };
@@ -163,6 +176,8 @@ export async function createTyre(data: CreateTyreInput) {
  * @returns Object indicating success/failure and updated tyre data
  */
 export async function toggleTyreStatus(id: number) {
+  await requireAuth();
+
   try {
     const tyre = await prisma.tyre.findUnique({ where: { id } });
 

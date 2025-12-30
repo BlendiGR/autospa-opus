@@ -6,6 +6,7 @@ import PasswordChangeCode, { EmailTranslations } from "@/components/emails/Passw
 import crypto from "crypto";
 import { cookies } from "next/headers";
 import { RESET_TOKEN_EXPIRY_MS } from "@/lib/constants";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 /**
  * Generates a cryptographically secure 6-digit code.
@@ -35,11 +36,15 @@ async function getEmailTranslations(locale: string): Promise<EmailTranslations> 
 
 /**
  * Initiates the password reset flow for a user.
+ * Rate limited to 5 requests per minute.
  *
  * @param email - The email address of the user requesting a password reset
  * @returns Object with success status and message
  */
 export async function forgotPassword(email: string) {
+  const limit = await checkRateLimit("auth");
+  if (!limit.success) return { success: false, message: limit.error };
+
   const user = await prisma.user.findUnique({
     where: { email },
   });

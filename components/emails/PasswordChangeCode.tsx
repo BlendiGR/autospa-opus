@@ -7,8 +7,6 @@ import {
   Text,
   Img,
   Section,
-  Row,
-  Column,
   Hr,
   Preview,
 } from "@react-email/components";
@@ -24,10 +22,10 @@ export type EmailTranslations = {
   copyright: string;
 };
 
-// Default English translations
+/** Default English translations */
 const defaultTranslations: EmailTranslations = {
   preview: "Your password reset code:",
-  greeting: "Hello,",
+  greeting: "Hello",
   description:
     "We received a request to reset your password. Use the code below to complete the process.",
   verificationCodeLabel: "Your verification code",
@@ -49,25 +47,6 @@ const PasswordChangeCode = ({
 }) => {
   const t = translations;
 
-  const colors = {
-    // Backgrounds
-    outerBg: "#f8f9fa",
-    cardBg: "#ffffff",
-    codeBoxBg: "#1a1a1a",
-    accentGradient: "linear-gradient(135deg, #cd4527 0%, #b03821 100%)",
-
-    // Text
-    heading: "#1a1a1a",
-    primary: "#2d3748",
-    secondary: "#718096",
-    accent: "#cd4527",
-    white: "#ffffff",
-
-    // Borders & accents
-    border: "#e2e8f0",
-    divider: "#edf2f7",
-  };
-
   return (
     <Html>
       <Head>
@@ -83,161 +62,139 @@ const PasswordChangeCode = ({
             '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
           margin: 0,
           padding: "40px 20px",
-          backgroundColor: colors.outerBg,
+          backgroundColor: "#f5f5f5",
         }}
       >
         <Container
           style={{
             maxWidth: "480px",
             margin: "0 auto",
+            backgroundColor: "#ffffff",
+            border: "1px solid #e0e0e0",
           }}
         >
-          {/* Logo Header */}
-          <Section style={{ textAlign: "center", marginBottom: "32px" }}>
+          {/* Header with Logo */}
+          <Section
+            style={{
+              padding: "32px 40px",
+              borderBottom: "1px solid #e0e0e0",
+              textAlign: "center",
+            }}
+          >
             <Img
               src="https://raw.githubusercontent.com/BlendiGR/autospa-opus/refs/heads/main/public/logo-opus.png?token=GHSAT0AAAAAADPB2SKD4SQRNUY6C5SHUBRA2KQCFJQ"
               alt="AutoSpa Opus"
-              width="120"
+              width="100"
               style={{ margin: "0 auto" }}
             />
           </Section>
 
-          {/* Main Card */}
-          <Section
-            style={{
-              backgroundColor: colors.cardBg,
-              borderRadius: "16px",
-              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-              overflow: "hidden",
-            }}
-          >
-            {/* Gradient accent bar */}
-            <Row>
-              <Column
-                style={{
-                  height: "4px",
-                  background: colors.accentGradient,
-                }}
-              />
-            </Row>
+          {/* Main Content */}
+          <Section style={{ padding: "32px 40px" }}>
+            <Heading
+              style={{
+                fontSize: "18px",
+                fontWeight: "600",
+                color: "#333333",
+                margin: "0 0 16px 0",
+              }}
+            >
+              {t.greeting}, {name}
+            </Heading>
 
-            {/* Content */}
-            <Section style={{ padding: "40px 32px" }}>
-              <Heading
+            <Text
+              style={{
+                fontSize: "14px",
+                lineHeight: "22px",
+                color: "#666666",
+                margin: "0 0 24px 0",
+              }}
+            >
+              {t.description}
+            </Text>
+
+            {/* Code Box */}
+            <Section
+              style={{
+                backgroundColor: "#fafafa",
+                border: "1px solid #e0e0e0",
+                padding: "24px",
+                textAlign: "center",
+                marginBottom: "24px",
+              }}
+            >
+              <Text
                 style={{
-                  fontSize: "24px",
-                  fontWeight: "700",
-                  color: colors.heading,
+                  fontSize: "11px",
+                  fontWeight: "600",
+                  textTransform: "uppercase" as const,
+                  letterSpacing: "0.05em",
+                  color: "#666666",
                   margin: "0 0 8px 0",
-                  letterSpacing: "-0.025em",
                 }}
               >
-                {t.greeting} {name}
-              </Heading>
-
-              <Text
-                style={{
-                  fontSize: "16px",
-                  lineHeight: "24px",
-                  color: colors.secondary,
-                  margin: "0 0 32px 0",
-                }}
-              >
-                {t.description}
+                {t.verificationCodeLabel}
               </Text>
-
-              {/* Code Box */}
-              <Section
-                style={{
-                  backgroundColor: colors.codeBoxBg,
-                  borderRadius: "12px",
-                  padding: "24px",
-                  textAlign: "center",
-                  margin: "0 0 32px 0",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: "600",
-                    textTransform: "uppercase" as const,
-                    letterSpacing: "0.1em",
-                    color: colors.accent,
-                    margin: "0 0 12px 0",
-                  }}
-                >
-                  {t.verificationCodeLabel}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: "36px",
-                    fontWeight: "700",
-                    fontFamily: '"SF Mono", "Fira Code", "Fira Mono", Menlo, Monaco, monospace',
-                    letterSpacing: "0.3em",
-                    color: colors.white,
-                    margin: 0,
-                    padding: 0,
-                  }}
-                >
-                  {code}
-                </Text>
-              </Section>
-
-              {/* Timer warning */}
-              <Section
-                style={{
-                  backgroundColor: "#fef3cd",
-                  border: "1px solid #ffc107",
-                  borderRadius: "8px",
-                  padding: "12px 16px",
-                  margin: "0 0 24px 0",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "14px",
-                    color: "#856404",
-                    margin: 0,
-                    textAlign: "center",
-                  }}
-                >
-                  {t.expiresIn} <strong>{t.tenMinutes}</strong>
-                </Text>
-              </Section>
-
-              <Hr
-                style={{
-                  borderColor: colors.divider,
-                  borderWidth: "1px",
-                  margin: "24px 0",
-                }}
-              />
-
               <Text
                 style={{
-                  fontSize: "14px",
-                  lineHeight: "22px",
-                  color: colors.secondary,
+                  fontSize: "32px",
+                  fontWeight: "700",
+                  fontFamily: "monospace",
+                  letterSpacing: "0.2em",
+                  color: "#333333",
                   margin: 0,
                 }}
               >
-                {t.ignoreMessage}
+                {code}
               </Text>
             </Section>
+
+            {/* Expiry Notice */}
+            <Text
+              style={{
+                fontSize: "13px",
+                color: "#666666",
+                margin: "0 0 24px 0",
+                textAlign: "center",
+              }}
+            >
+              {t.expiresIn} <strong>{t.tenMinutes}</strong>.
+            </Text>
+
+            <Hr
+              style={{
+                borderColor: "#e0e0e0",
+                borderWidth: "1px",
+                margin: "24px 0",
+              }}
+            />
+
+            <Text
+              style={{
+                fontSize: "13px",
+                lineHeight: "20px",
+                color: "#999999",
+                margin: 0,
+              }}
+            >
+              {t.ignoreMessage}
+            </Text>
           </Section>
 
           {/* Footer */}
           <Section
             style={{
-              textAlign: "center",
-              padding: "32px 0 0 0",
+              padding: "20px 40px",
+              borderTop: "1px solid #e0e0e0",
+              backgroundColor: "#fafafa",
             }}
           >
             <Text
               style={{
-                fontSize: "12px",
-                color: "#a0aec0",
+                fontSize: "11px",
+                color: "#999999",
                 margin: 0,
+                textAlign: "center",
               }}
             >
               © {new Date().getFullYear()} AutoSpa Opus. {t.copyright}
