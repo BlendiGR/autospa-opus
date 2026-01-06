@@ -205,6 +205,17 @@
     "removeItem": "Fshi",
     "addInvoiceButton": "Krijo Punën",
     "invoiceSuccess": "Puna u krijua me sukses!",
-    "genericError": "Diçka shkoi keq"
+    "genericError": "Diçka shkoi keq",
+    "services": "Historia e Shërbimeve",
+    "noServices": "Nuk u gjetën shërbime",
+    "date": "Data",
+    "type": "Lloji",
+    "details": "Detajet",
+    "amount": "Shuma",
+    "actions": "Veprimet",
+    "delete": "Fshi",
+    "tyreStorage": "Ruajtje Gomash",
+    "job": "Punë",
+    "total": "Totali"
   }
 }

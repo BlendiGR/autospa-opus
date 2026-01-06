@@ -51,4 +51,3 @@ export function useLoading(initialState: boolean = false) {
     resetState,
   };
 }
-

@@ -205,6 +205,17 @@
     "removeItem": "Remove",
     "addInvoiceButton": "Create Job",
     "invoiceSuccess": "Job created successfully!",
-    "genericError": "Something went wrong"
+    "genericError": "Something went wrong",
+    "services": "Services History",
+    "noServices": "No services found",
+    "date": "Date",
+    "type": "Type",
+    "details": "Details",
+    "amount": "Amount",
+    "actions": "Actions",
+    "delete": "Delete",
+    "tyreStorage": "Tyre Storage",
+    "job": "Job",
+    "total": "Total Cost"
   }
 }

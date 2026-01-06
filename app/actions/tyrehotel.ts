@@ -159,7 +159,9 @@ export async function fetchLocations(): Promise<ActionResult<string[]>> {
     });
     return {
       success: true,
-      data: locations.map((l: { location: string | null }) => l.location).filter(Boolean) as string[],
+      data: locations
+        .map((l: { location: string | null }) => l.location)
+        .filter(Boolean) as string[],
     };
   } catch {
     return { success: false, error: "Failed to fetch locations" };
@@ -175,9 +177,7 @@ interface CreateTyreInput {
 /**
  * Creates a new tyre storage record.
  */
-export async function createTyre(
-  data: CreateTyreInput
-): Promise<ActionResult<Tyre>> {
+export async function createTyre(data: CreateTyreInput): Promise<ActionResult<Tyre>> {
   try {
     await requireAuth();
 
@@ -210,9 +210,7 @@ const tyreIdSchema = z.number().int().positive("Invalid tyre ID");
 /**
  * Toggles the storage status of a tyre (Check-in / Check-out).
  */
-export async function toggleTyreStatus(
-  id: number
-): Promise<ActionResult<TyreWithCustomer>> {
+export async function toggleTyreStatus(id: number): Promise<ActionResult<TyreWithCustomer>> {
   try {
     // Server-side validation
     const validated = tyreIdSchema.safeParse(id);

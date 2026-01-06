@@ -9,6 +9,7 @@ import { Check, Car, MapPin, Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import SuccessMessage from "@/components/ui/successMessage";
 import { addJobToCustomer } from "@/app/actions/customers";
 import { fetchLocations } from "@/app/actions/tyrehotel";
 import { jobSchema, JobFormData } from "@/lib/schemas/jobSchema";
@@ -68,14 +69,7 @@ export default function AddJobForm({ customerId }: AddJobFormProps) {
   };
 
   if (success) {
-    return (
-      <div className="flex flex-col items-center justify-center py-8 gap-4 bg-white rounded-xl">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <Check className="w-8 h-8 text-green-600" />
-        </div>
-        <p className="text-lg font-medium text-gray-900">{t("jobSuccess")}</p>
-      </div>
-    );
+    return <SuccessMessage title={t("jobSuccess")} />;
   }
 
   return (

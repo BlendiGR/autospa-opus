@@ -67,8 +67,11 @@ export default async function CustomersTable({ page = 1 }: CustomersTableProps) 
                 </td>
                 <td className="py-3 px-4 text-right">
                   <Link href={`/customers/${customer.id}`}>
-                    <Button variant="ghost" size="sm">
-                      <Eye className="w-4 h-4" />
+                    <Button
+                      size="sm"
+                      className="bg-[#111827] hover:bg-gray-900 text-white shadow-sm transition-all"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
                       {t("view")}
                     </Button>
                   </Link>

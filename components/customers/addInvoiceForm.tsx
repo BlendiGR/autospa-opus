@@ -9,8 +9,12 @@ import { Check, Car, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import SuccessMessage from "@/components/ui/successMessage";
 import { addInvoiceToCustomer } from "@/app/actions/customers";
-import { customerInvoiceSchema, CustomerInvoiceFormData } from "@/lib/schemas/customerInvoiceSchema";
+import {
+  customerInvoiceSchema,
+  CustomerInvoiceFormData,
+} from "@/lib/schemas/customerInvoiceSchema";
 import { useLoading } from "@/hooks";
 
 interface AddInvoiceFormProps {
@@ -76,10 +80,7 @@ export default function AddInvoiceForm({ customerId }: AddInvoiceFormProps) {
   if (success) {
     return (
       <div className="flex flex-col items-center justify-center py-8 gap-4 bg-white rounded-xl">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <Check className="w-8 h-8 text-green-600" />
-        </div>
-        <p className="text-lg font-medium text-gray-900">{t("invoiceSuccess")}</p>
+        <SuccessMessage title={t("invoiceSuccess")} />
       </div>
     );
   }
@@ -121,10 +122,7 @@ export default function AddInvoiceForm({ customerId }: AddInvoiceFormProps) {
 
         <div className="space-y-3">
           {fields.map((field, index) => (
-            <div
-              key={field.id}
-              className="flex gap-3 items-start p-3 bg-gray-50 rounded-lg"
-            >
+            <div key={field.id} className="flex gap-3 items-start p-3 bg-gray-50 rounded-lg">
               <div className="flex-1">
                 <Input
                   placeholder={t("servicePlaceholder")}
@@ -132,7 +130,9 @@ export default function AddInvoiceForm({ customerId }: AddInvoiceFormProps) {
                   error={!!errors.items?.[index]?.service}
                 />
                 {errors.items?.[index]?.service && (
-                  <span className="text-xs text-red-500">{errors.items[index].service.message}</span>
+                  <span className="text-xs text-red-500">
+                    {errors.items[index].service.message}
+                  </span>
                 )}
               </div>
               <div className="w-32">

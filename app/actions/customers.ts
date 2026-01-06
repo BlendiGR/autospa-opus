@@ -4,10 +4,18 @@ import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth-utils";
 import { prisma } from "@/prisma/prisma";
 import { jobSchema, JobFormData } from "@/lib/schemas/jobSchema";
-import { customerInvoiceSchema, CustomerInvoiceFormData } from "@/lib/schemas/customerInvoiceSchema";
+import {
+  customerInvoiceSchema,
+  CustomerInvoiceFormData,
+} from "@/lib/schemas/customerInvoiceSchema";
 import { CUSTOMERS_PER_PAGE, VAT_RATE } from "@/lib/constants";
 import type { ActionResult } from "@/lib/action-result";
-import type { Customer } from "@/app/generated/prisma/client";
+import type { Customer, Tyre, Invoices } from "@/app/generated/prisma/client";
+
+type CustomerWithRelations = Customer & {
+  tyres: Tyre[];
+  invoices: Invoices[];
+};
 
 type CustomersData = {
   customers: Customer[];
@@ -48,13 +56,19 @@ export async function getCustomers({
 }
 
 /**
- * Fetches a customer by ID.
+ * Fetches a customer by ID with related tyres and invoices.
  */
-export async function getCustomerById(id: number): Promise<ActionResult<Customer>> {
+export async function getCustomerById(id: number): Promise<ActionResult<CustomerWithRelations>> {
   try {
     await requireAuth();
 
-    const customer = await prisma.customer.findUnique({ where: { id } });
+    const customer = await prisma.customer.findUnique({
+      where: { id },
+      include: {
+        tyres: { orderBy: { dateStored: "desc" } },
+        invoices: { orderBy: { createdAt: "desc" } },
+      },
+    });
 
     if (!customer) {
       return { success: false, error: "Customer not found" };
@@ -67,13 +81,12 @@ export async function getCustomerById(id: number): Promise<ActionResult<Customer
 }
 
 /**
- * Adds a new tyre storage job for a customer.
- *
- * @param customerId - The customer ID to link the job to
- * @param data - Job form data (plate, number, location)
- * @returns Object indicating success/failure
+ * Adds a new tyre storage for a customer.
  */
-export async function addJobToCustomer(customerId: number, data: JobFormData) {
+export async function addJobToCustomer(
+  customerId: number,
+  data: JobFormData
+): Promise<ActionResult<null>> {
   try {
     await requireAuth();
 
@@ -95,7 +108,7 @@ export async function addJobToCustomer(customerId: number, data: JobFormData) {
 
     revalidatePath("/dashboard");
     revalidatePath(`/customers/${customerId}`);
-    return { success: true };
+    return { success: true, data: null };
   } catch (error) {
     if (error instanceof Error && error.message.includes("Unique constraint")) {
       return { success: false, error: "A tyre with this plate already exists" };
@@ -105,13 +118,12 @@ export async function addJobToCustomer(customerId: number, data: JobFormData) {
 }
 
 /**
- * Adds a new invoice for a customer.
- *
- * @param customerId - The customer ID to link the invoice to
- * @param data - Invoice form data (plate, items with service/price)
- * @returns Object indicating success/failure
+ * Adds a new job/invoice for a customer.
  */
-export async function addInvoiceToCustomer(customerId: number, data: CustomerInvoiceFormData) {
+export async function addInvoiceToCustomer(
+  customerId: number,
+  data: CustomerInvoiceFormData
+): Promise<ActionResult<null>> {
   try {
     await requireAuth();
 
@@ -140,8 +152,41 @@ export async function addInvoiceToCustomer(customerId: number, data: CustomerInv
     });
 
     revalidatePath(`/customers/${customerId}`);
-    return { success: true };
+    return { success: true, data: null };
   } catch {
     return { success: false, error: "Failed to create invoice" };
+  }
+}
+
+/**
+ * Deletes an invoice by ID.
+ */
+export async function deleteInvoice(id: number, customerId: number): Promise<ActionResult<null>> {
+  try {
+    await requireAuth();
+
+    await prisma.invoices.delete({ where: { id } });
+
+    revalidatePath(`/customers/${customerId}`);
+    return { success: true, data: null };
+  } catch {
+    return { success: false, error: "Failed to delete invoice" };
+  }
+}
+
+/**
+ * Deletes a tyre storage by ID.
+ */
+export async function deleteTyre(id: number, customerId: number): Promise<ActionResult<null>> {
+  try {
+    await requireAuth();
+
+    await prisma.tyre.delete({ where: { id } });
+
+    revalidatePath(`/customers/${customerId}`);
+    revalidatePath("/dashboard");
+    return { success: true, data: null };
+  } catch {
+    return { success: false, error: "Failed to delete tyre storage" };
   }
 }

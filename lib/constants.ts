@@ -20,8 +20,8 @@ export const PHONE_REGEX = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/;
 export const FINNISH_PLATE_REGEX = /^[A-ZÄÖÅ]{2,3}-\d{1,3}$/i;
 
 /** Password regex: at least 8 chars, 1 uppercase, 1 number, 1 special character */
-export const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+export const PASSWORD_REGEX =
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
 
 /** VAT rate for Finland (25.5%) */
 export const VAT_RATE = 0.255;
-

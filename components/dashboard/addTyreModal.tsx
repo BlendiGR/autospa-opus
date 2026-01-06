@@ -10,6 +10,7 @@ import Modal from "../ui/modal";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import SuccessMessage from "../ui/successMessage";
 
 import { useCreateTyre } from "@/hooks";
 import { tyreSchema, TyreFormData } from "@/lib/schemas/tyreSchema";
@@ -82,12 +83,7 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("title")}>
       {success ? (
-        <div className="flex flex-col items-center justify-center py-8 gap-4">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-            <Check className="w-8 h-8 text-green-600" />
-          </div>
-          <p className="text-lg font-medium text-gray-900">{t("success")}</p>
-        </div>
+        <SuccessMessage title={t("success")} />
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">

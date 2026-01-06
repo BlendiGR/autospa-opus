@@ -22,10 +22,10 @@ export default function CustomerForms({ customerId }: CustomerFormsProps) {
       <div className="flex gap-2 mb-6">
         <button
           onClick={() => setActiveTab("job")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
             activeTab === "job"
-              ? "bg-[#111827] text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
+              ? "bg-[#111827] text-white shadow-md scale-105"
+              : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
           }`}
         >
           <Briefcase className="w-4 h-4" />
@@ -33,10 +33,10 @@ export default function CustomerForms({ customerId }: CustomerFormsProps) {
         </button>
         <button
           onClick={() => setActiveTab("invoice")}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
             activeTab === "invoice"
-              ? "bg-[#111827] text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
+              ? "bg-[#111827] text-white shadow-md scale-105"
+              : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 shadow-sm"
           }`}
         >
           <FileText className="w-4 h-4" />

@@ -10,11 +10,7 @@ import PasswordChangeCode from "@/components/emails/PasswordChangeCode";
 import { RESET_TOKEN_EXPIRY_MS } from "@/lib/constants";
 import { checkRateLimit } from "@/lib/ratelimit";
 import { saltAndHashPassword } from "@/lib/utils/saltAndHashPassword";
-import {
-  emailSchema,
-  resetCodeSchema,
-  newPasswordSchema,
-} from "@/lib/schemas/passwordSchema";
+import { emailSchema, resetCodeSchema, newPasswordSchema } from "@/lib/schemas/passwordSchema";
 import type { ActionResult } from "@/lib/action-result";
 
 /**
@@ -31,9 +27,7 @@ type ForgotPasswordData = { message: string };
  * Initiates the password reset flow for a user.
  * Rate limited to 5 requests per minute.
  */
-export async function forgotPassword(
-  email: string
-): Promise<ActionResult<ForgotPasswordData>> {
+export async function forgotPassword(email: string): Promise<ActionResult<ForgotPasswordData>> {
   try {
     const validated = emailSchema.safeParse({ email });
     if (!validated.success) {
@@ -49,7 +43,10 @@ export async function forgotPassword(
 
     if (!user) {
       // Don't reveal if email exists or not for security
-      return { success: true, data: { message: "If the email exists, a reset code has been sent." } };
+      return {
+        success: true,
+        data: { message: "If the email exists, a reset code has been sent." },
+      };
     }
 
     const code = generateSecureCode();

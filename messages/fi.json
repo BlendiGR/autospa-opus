@@ -205,6 +205,17 @@
     "removeItem": "Poista",
     "addInvoiceButton": "Luo Työ",
     "invoiceSuccess": "Työ luotu onnistuneesti!",
-    "genericError": "Jotain meni pieleen"
+    "genericError": "Jotain meni pieleen",
+    "services": "Palveluhistoria",
+    "noServices": "Ei palveluita",
+    "date": "Päivämäärä",
+    "type": "Tyyppi",
+    "details": "Tiedot",
+    "amount": "Summa",
+    "actions": "Toiminnot",
+    "delete": "Poista",
+    "tyreStorage": "Rengassäilytys",
+    "job": "Työ",
+    "total": "Yhteensä"
   }
 }

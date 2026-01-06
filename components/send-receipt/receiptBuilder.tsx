@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 
 import { useLoading, useInvoiceForm } from "@/hooks";
 import { sendReceipt } from "@/app/actions/sendReceipt";
-import SuccessMessage from "./successMessage";
+import SuccessMessage from "@/components/ui/successMessage";
 import ReceiptForm from "./receiptForm";
 import ReceiptPreviewSection from "./receiptPreviewSection";
 
@@ -15,15 +15,8 @@ import ReceiptPreviewSection from "./receiptPreviewSection";
  */
 export default function ReceiptBuilder() {
   const t = useTranslations("SendReceipt");
-  const {
-    loading,
-    success,
-    setSuccess,
-    serverError,
-    setServerError,
-    withLoading,
-    resetState,
-  } = useLoading();
+  const { loading, success, setSuccess, serverError, setServerError, withLoading, resetState } =
+    useLoading();
 
   const { form, register, fields, watchedValues, addItem, removeItem, resetForm, canRemoveItem } =
     useInvoiceForm();
@@ -51,7 +44,15 @@ export default function ReceiptBuilder() {
   });
 
   if (success) {
-    return <SuccessMessage title={t("success")} description={t("successDescription")} />;
+    return (
+      <div className="w-full max-w-md mx-auto mt-8">
+        <SuccessMessage
+          title={t("success")}
+          description={t("successDescription")}
+          className="shadow-lg border border-gray-100 p-8"
+        />
+      </div>
+    );
   }
 
   return (
