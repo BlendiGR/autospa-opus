@@ -37,13 +37,14 @@ export default function ForgotPasswordClient() {
     setError(null);
     const result = await verifyResetCode(email, data.code);
 
-    if (result.success && result.resetToken) {
-      // Redirect to reset password page with the UUID token
-      router.push(`/reset-password/${result.resetToken}`);
-    } else {
+    if (!result.success) {
       setError(result.error || "Something went wrong");
       stopLoading();
+      return;
     }
+
+    // Type narrowing: TypeScript now knows result.data exists
+    router.push(`/reset-password/${result.data.resetToken}`);
   };
 
   return (

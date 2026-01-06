@@ -16,7 +16,7 @@ export default async function ResetPasswordPage({ params }: Props) {
   // Validate token server-side
   const validation = await validateResetToken(token);
 
-  if (!validation.valid) {
+  if (!validation.success) {
     // Redirect to forgot password if token is invalid
     redirect("/forgot-password");
   }
@@ -42,7 +42,7 @@ export default async function ResetPasswordPage({ params }: Props) {
             <p className="text-sm text-white">{t("subtitle")}</p>
           </div>
           <div className="pt-30 w-full">
-            <ResetPasswordClient resetToken={token} userName={validation.name ?? null} />
+            <ResetPasswordClient resetToken={token} userName={validation.data.name ?? null} />
           </div>
         </div>
       </div>

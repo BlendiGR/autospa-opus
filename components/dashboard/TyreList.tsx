@@ -12,25 +12,17 @@ interface TyreListProps {
 export default async function TyreList({ query, page = 1, isStored = true }: TyreListProps) {
   const t = await getTranslations("Dashboard");
 
-  let data = null;
-  let error = false;
+  const result = await fetchTyres(query, page, isStored);
 
-  try {
-    data = await fetchTyres(query, page, isStored);
-  } catch (e) {
-    console.error("Failed to fetch tyres:", e);
-    error = true;
-  }
-
-  if (error) {
+  if (!result.success) {
     return <p className="text-red-500 text-center py-8">{t("fetchError")}</p>;
   }
 
-  if (!data || data.tyres.length === 0) {
+  const { tyres, pagination } = result.data;
+
+  if (tyres.length === 0) {
     return <p className="text-gray-500 text-center py-8">{t("noTyresFound")}</p>;
   }
-
-  const { tyres, pagination } = data;
 
   return (
     <div>

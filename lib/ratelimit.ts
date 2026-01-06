@@ -36,21 +36,9 @@ export const authRatelimit = new Ratelimit({
 type RateLimitType = "auth" | "general";
 
 /**
- * Checks rate limit for the current request.
- * Use at the start of server actions to protect against abuse.
- *
  * @param type - "auth" for strict limiting (5/min), "general" for normal (10/10s)
  * @param identifier - Optional custom identifier (defaults to IP address)
  * @returns Object with success status; if failed, includes error message
- *
- * @example
- * ```ts
- * export async function login(email: string, password: string) {
- *   const limit = await checkRateLimit("auth");
- *   if (!limit.success) return { error: limit.error };
- *   // ... rest of your action
- * }
- * ```
  */
 export async function checkRateLimit(
   type: RateLimitType = "general",

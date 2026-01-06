@@ -1,148 +1,183 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { prisma } from "@/prisma/prisma";
 import { tyreSchema } from "@/lib/schemas/tyreSchema";
 import { PAGE_SIZE } from "@/lib/constants";
 import { requireAuth } from "@/lib/auth-utils";
+import type { ActionResult } from "@/lib/action-result";
+import type { Tyre, Customer } from "@/app/generated/prisma/client";
+
+type TyreWithCustomer = Tyre & { customer: Customer | null };
+
+type TyresData = {
+  tyres: TyreWithCustomer[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+  };
+};
 
 /**
  * Fetches a paginated list of tyres based on search criteria.
- *
- * @param query - Optional search string for plate, number, location, or customer name
- * @param page - Page number for pagination (default: 1)
- * @param isStored - Filter by storage status (default: true)
- * @returns Object containing paginated tyre records and pagination metadata
  */
-export async function fetchTyres(query?: string | null, page: number = 1, isStored = true) {
-  await requireAuth();
+export async function fetchTyres(
+  query?: string | null,
+  page: number = 1,
+  isStored = true
+): Promise<ActionResult<TyresData>> {
+  try {
+    await requireAuth();
 
-  const skip = (page - 1) * PAGE_SIZE;
+    const skip = (page - 1) * PAGE_SIZE;
 
-  const whereClause = {
-    ...(query && {
-      OR: [
-        { plate: { contains: query, mode: "insensitive" as const } },
-        { number: { contains: query, mode: "insensitive" as const } },
-        { location: { contains: query, mode: "insensitive" as const } },
-        { customer: { name: { contains: query, mode: "insensitive" as const } } },
-      ],
-    }),
-  };
+    const whereClause = {
+      ...(query && {
+        OR: [
+          { plate: { contains: query, mode: "insensitive" as const } },
+          { number: { contains: query, mode: "insensitive" as const } },
+          { location: { contains: query, mode: "insensitive" as const } },
+          { customer: { name: { contains: query, mode: "insensitive" as const } } },
+        ],
+      }),
+    };
 
-  const [tyres, total] = await Promise.all([
-    prisma.tyre.findMany({
-      where: {
-        ...whereClause,
-        isStored: isStored,
+    const [tyres, total] = await Promise.all([
+      prisma.tyre.findMany({
+        where: {
+          ...whereClause,
+          isStored: isStored,
+        },
+        include: { customer: true },
+        orderBy: { dateStored: "desc" },
+        skip,
+        take: PAGE_SIZE,
+      }),
+      prisma.tyre.count({ where: { ...whereClause, isStored: isStored } }),
+    ]);
+
+    return {
+      success: true,
+      data: {
+        tyres,
+        pagination: {
+          currentPage: page,
+          totalPages: Math.ceil(total / PAGE_SIZE),
+          totalItems: total,
+        },
       },
-      include: { customer: true },
-      orderBy: { dateStored: "desc" },
-      skip,
-      take: PAGE_SIZE,
-    }),
-    prisma.tyre.count({ where: { ...whereClause, isStored: isStored } }),
-  ]);
-
-  return {
-    tyres,
-    pagination: {
-      currentPage: page,
-      totalPages: Math.ceil(total / PAGE_SIZE),
-      totalItems: total,
-    },
-  };
+    };
+  } catch {
+    return { success: false, error: "Failed to fetch tyres" };
+  }
 }
+
+type CountsByLocation = {
+  countsByLocation: { location: string; count: number }[];
+  total: number;
+};
 
 /**
  * Retrieves statistics about stored tyres.
- *
- * @returns Object containing counts by location and total count
  */
-export async function tyreCounts() {
-  await requireAuth();
+export async function tyreCounts(): Promise<ActionResult<CountsByLocation>> {
+  try {
+    await requireAuth();
 
-  const byLocation = await prisma.tyre.groupBy({
-    by: ["location"],
-    _count: { id: true },
-    where: { isStored: true },
-  });
+    const byLocation = await prisma.tyre.groupBy({
+      by: ["location"],
+      _count: { id: true },
+      where: { isStored: true },
+    });
 
-  const countsByLocation = byLocation.map(
-    (l: { location: string | null; _count: { id: number } }) => ({
-      location: l.location ?? "Unknown",
-      count: l._count.id,
-    })
-  );
+    const countsByLocation = byLocation.map(
+      (l: { location: string | null; _count: { id: number } }) => ({
+        location: l.location ?? "Unknown",
+        count: l._count.id,
+      })
+    );
 
-  const total = countsByLocation.reduce(
-    (acc: number, l: { location: string; count: number }) => acc + l.count,
-    0
-  );
+    const total = countsByLocation.reduce(
+      (acc: number, l: { location: string; count: number }) => acc + l.count,
+      0
+    );
 
-  return {
-    countsByLocation,
-    total,
-  };
+    return {
+      success: true,
+      data: { countsByLocation, total },
+    };
+  } catch {
+    return { success: false, error: "Failed to fetch tyre counts" };
+  }
 }
 
 /**
  * Gets the total number of customers in the system.
- *
- * @returns Total customer count
  */
-export async function customerCount() {
-  await requireAuth();
-
-  const count = await prisma.customer.count();
-  return count;
+export async function customerCount(): Promise<ActionResult<number>> {
+  try {
+    await requireAuth();
+    const count = await prisma.customer.count();
+    return { success: true, data: count };
+  } catch {
+    return { success: false, error: "Failed to fetch customer count" };
+  }
 }
+
+type CustomerOption = { id: number; name: string; plate: string | null };
 
 /**
  * Fetches a list of all customers for selection purposes.
- *
- * @returns Array of customers with id, name, and plate
  */
-export async function fetchCustomers() {
-  await requireAuth();
+export async function fetchCustomers(): Promise<ActionResult<CustomerOption[]>> {
+  try {
+    await requireAuth();
 
-  const customers = await prisma.customer.findMany({
-    select: { id: true, name: true, plate: true },
-    orderBy: { name: "asc" },
-  });
-  return customers;
+    const customers = await prisma.customer.findMany({
+      select: { id: true, name: true, plate: true },
+      orderBy: { name: "asc" },
+    });
+    return { success: true, data: customers };
+  } catch {
+    return { success: false, error: "Failed to fetch customers" };
+  }
 }
 
 /**
  * Retrieves a list of unique storage locations currently in use.
- *
- * @returns Array of distinct location strings
  */
-export async function fetchLocations() {
-  await requireAuth();
+export async function fetchLocations(): Promise<ActionResult<string[]>> {
+  try {
+    await requireAuth();
 
-  const locations = await prisma.tyre.findMany({
-    where: { location: { not: null } },
-    select: { location: true },
-    distinct: ["location"],
-  });
-  return locations.map((l: { location: string | null }) => l.location).filter(Boolean) as string[];
+    const locations = await prisma.tyre.findMany({
+      where: { location: { not: null } },
+      select: { location: true },
+      distinct: ["location"],
+    });
+    return {
+      success: true,
+      data: locations.map((l: { location: string | null }) => l.location).filter(Boolean) as string[],
+    };
+  } catch {
+    return { success: false, error: "Failed to fetch locations" };
+  }
 }
 
 interface CreateTyreInput {
   plate: string;
   number: string;
   location: string;
-  customerId?: number;
 }
 
 /**
  * Creates a new tyre storage record.
- *
- * @param data - The tyre data to create
- * @returns Object indicating success/failure and the created tyre or error message
  */
-export async function createTyre(data: CreateTyreInput) {
+export async function createTyre(
+  data: CreateTyreInput
+): Promise<ActionResult<Tyre>> {
   try {
     await requireAuth();
 
@@ -155,14 +190,12 @@ export async function createTyre(data: CreateTyreInput) {
         plate: validatedData.data.plate.toUpperCase(),
         number: validatedData.data.number,
         location: validatedData.data.location,
-        customerId: validatedData.data.customerId ?? null,
         dateStored: new Date(),
         isStored: true,
       },
-      include: { customer: true },
     });
     revalidatePath("/dashboard");
-    return { success: true, tyre };
+    return { success: true, data: tyre };
   } catch (error) {
     if (error instanceof Error && error.message.includes("Unique constraint")) {
       return { success: false, error: "A tyre with this plate already exists" };
@@ -171,17 +204,25 @@ export async function createTyre(data: CreateTyreInput) {
   }
 }
 
+/** Schema for validating tyre ID parameter */
+const tyreIdSchema = z.number().int().positive("Invalid tyre ID");
+
 /**
  * Toggles the storage status of a tyre (Check-in / Check-out).
- *
- * @param id - The ID of the tyre to update
- * @returns Object indicating success/failure and updated tyre data
  */
-export async function toggleTyreStatus(id: number) {
+export async function toggleTyreStatus(
+  id: number
+): Promise<ActionResult<TyreWithCustomer>> {
   try {
+    // Server-side validation
+    const validated = tyreIdSchema.safeParse(id);
+    if (!validated.success) {
+      return { success: false, error: "Invalid tyre ID" };
+    }
+
     await requireAuth();
 
-    const tyre = await prisma.tyre.findUnique({ where: { id } });
+    const tyre = await prisma.tyre.findUnique({ where: { id: validated.data } });
 
     if (!tyre) {
       return { success: false, error: "Tyre not found" };
@@ -190,7 +231,7 @@ export async function toggleTyreStatus(id: number) {
     const newIsStored = !tyre.isStored;
 
     const updatedTyre = await prisma.tyre.update({
-      where: { id },
+      where: { id: validated.data },
       data: {
         isStored: newIsStored,
         deletedAt: newIsStored ? null : new Date(),
@@ -199,7 +240,7 @@ export async function toggleTyreStatus(id: number) {
     });
 
     revalidatePath("/dashboard");
-    return { success: true, tyre: updatedTyre };
+    return { success: true, data: updatedTyre };
   } catch (error) {
     console.error("Failed to toggle tyre status:", error);
     return { success: false, error: "Failed to toggle tyre status" };

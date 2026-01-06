@@ -27,17 +27,17 @@ describe('tyrehotel actions', () => {
   });
 
   describe('fetchTyres', () => {
-    it('should throw "Unauthorized" if user is not logged in', async () => {
+    it('should return error result if user is not logged in', async () => {
       // Simulate logged out
       vi.mocked(auth).mockResolvedValue(null as any);
 
-      await expect(fetchTyres()).rejects.toThrow('Unauthorized');
+      const result = await fetchTyres();
       
-      // Verify prisma was NOT called
+      expect(result.success).toBe(false);
       expect(prisma.tyre.findMany).not.toHaveBeenCalled();
     });
 
-    it('should call prisma if user is logged in', async () => {
+    it('should return success result with data if user is logged in', async () => {
       // Simulate logged in
       vi.mocked(auth).mockResolvedValue({ user: { id: '1' } } as any);
       
@@ -47,7 +47,10 @@ describe('tyrehotel actions', () => {
 
       const result = await fetchTyres();
       
-      expect(result.tyres).toEqual([]);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.tyres).toEqual([]);
+      }
       expect(prisma.tyre.findMany).toHaveBeenCalled();
     });
   });

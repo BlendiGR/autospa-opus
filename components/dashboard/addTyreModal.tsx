@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 
 import { useCreateTyre } from "@/hooks";
 import { tyreSchema, TyreFormData } from "@/lib/schemas/tyreSchema";
-import { fetchCustomers, fetchLocations } from "@/app/actions/tyrehotel";
+import { fetchLocations } from "@/app/actions/tyrehotel";
 
 interface AddTyreModalProps {
   isOpen: boolean;
@@ -21,13 +21,10 @@ interface AddTyreModalProps {
   onSuccess?: () => void;
 }
 
-type Customer = { id: number; name: string; plate: string | null };
-
 export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModalProps) {
   const t = useTranslations("AddTyreModal");
   const { create, loading, error: hookError } = useCreateTyre();
 
-  const [customers, setCustomers] = useState<Customer[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -43,7 +40,6 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
       plate: "",
       number: "",
       location: "",
-      customerId: undefined,
     },
   });
 
@@ -54,9 +50,10 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
     // Reset state synchronously before fetching
     reset();
 
-    // Fetch data asynchronously
-    fetchCustomers().then(setCustomers);
-    fetchLocations().then(setLocations);
+    // Fetch locations asynchronously
+    fetchLocations().then((result) => {
+      if (result.success) setLocations(result.data);
+    });
   }, [isOpen, reset]);
 
   // Auto-close on success
@@ -127,24 +124,6 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
             {errors.location && (
               <span className="text-xs text-red-500">{errors.location.message}</span>
             )}
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <Label htmlFor="customerId">{t("customer")}</Label>
-            <select
-              id="customerId"
-              {...register("customerId", {
-                setValueAs: (v) => (v === "" ? undefined : Number(v)),
-              })}
-              className="flex h-10 w-full rounded-xl border border-gray-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-600"
-            >
-              <option value="">{t("noCustomer")}</option>
-              {customers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} {c.plate && `(${c.plate})`}
-                </option>
-              ))}
-            </select>
           </div>
 
           {serverError && (

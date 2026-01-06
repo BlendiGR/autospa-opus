@@ -6,7 +6,11 @@ import { getTranslations } from "next-intl/server";
 export default async function DashboardStats() {
   const t = await getTranslations("Dashboard");
 
-  const [counts, custCount] = await Promise.all([tyreCounts(), customerCount()]);
+  const [countsResult, custCountResult] = await Promise.all([tyreCounts(), customerCount()]);
+
+  // Handle errors gracefully - show 0 if fetch fails
+  const counts = countsResult.success ? countsResult.data : { countsByLocation: [], total: 0 };
+  const custCount = custCountResult.success ? custCountResult.data : 0;
 
   return (
     <div className="flex flex-col gap-4">

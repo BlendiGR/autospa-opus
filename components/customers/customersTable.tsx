@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "../ui/button";
 import { Eye } from "lucide-react";
 import { getTranslations } from "next-intl/server";
@@ -11,17 +12,9 @@ interface CustomersTableProps {
 export default async function CustomersTable({ page = 1 }: CustomersTableProps) {
   const t = await getTranslations("Customers");
 
-  let data = null;
-  let error = false;
+  const result = await getCustomers({ page });
 
-  try {
-    data = await getCustomers({ page });
-  } catch (e) {
-    console.error("Failed to fetch customers:", e);
-    error = true;
-  }
-
-  if (error) {
+  if (!result.success) {
     return (
       <div className="bg-gray-100 rounded-2xl p-8 m-4 text-center">
         <p className="text-red-500 font-medium">{t("fetchError")}</p>
@@ -29,15 +22,15 @@ export default async function CustomersTable({ page = 1 }: CustomersTableProps) 
     );
   }
 
-  if (!data || data.customers.length === 0) {
+  const { customers, totalPages } = result.data;
+
+  if (customers.length === 0) {
     return (
       <div className="bg-gray-100 rounded-2xl p-8 m-4 text-center">
         <p className="text-gray-500">{t("noCustomers")}</p>
       </div>
     );
   }
-
-  const { customers, totalPages } = data;
 
   return (
     <div className="bg-gray-100 rounded-2xl p-4 m-4 overflow-hidden shadow-md">
@@ -73,10 +66,12 @@ export default async function CustomersTable({ page = 1 }: CustomersTableProps) 
                   <span className="text-gray-600">{customer.phone || "—"}</span>
                 </td>
                 <td className="py-3 px-4 text-right">
-                  <Button variant="ghost" size="sm">
-                    <Eye className="w-4 h-4" />
-                    {t("view")}
-                  </Button>
+                  <Link href={`/customers/${customer.id}`}>
+                    <Button variant="ghost" size="sm">
+                      <Eye className="w-4 h-4" />
+                      {t("view")}
+                    </Button>
+                  </Link>
                 </td>
               </tr>
             ))}

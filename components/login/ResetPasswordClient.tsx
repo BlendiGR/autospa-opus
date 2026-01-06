@@ -32,7 +32,7 @@ export default function ResetPasswordClient({ resetToken, userName }: ResetPassw
           router.push("/");
         }, 2000);
       } else {
-        setError(result.message || t("genericError"));
+        setError(result.error || t("genericError"));
       }
     } catch {
       setError(t("genericError"));

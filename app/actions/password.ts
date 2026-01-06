@@ -10,6 +10,12 @@ import PasswordChangeCode from "@/components/emails/PasswordChangeCode";
 import { RESET_TOKEN_EXPIRY_MS } from "@/lib/constants";
 import { checkRateLimit } from "@/lib/ratelimit";
 import { saltAndHashPassword } from "@/lib/utils/saltAndHashPassword";
+import {
+  emailSchema,
+  resetCodeSchema,
+  newPasswordSchema,
+} from "@/lib/schemas/passwordSchema";
+import type { ActionResult } from "@/lib/action-result";
 
 /**
  * Generates a cryptographically secure 6-digit code.
@@ -19,22 +25,31 @@ function generateSecureCode(): string {
   return code.toString();
 }
 
+type ForgotPasswordData = { message: string };
+
 /**
  * Initiates the password reset flow for a user.
  * Rate limited to 5 requests per minute.
  */
-export async function forgotPassword(email: string) {
+export async function forgotPassword(
+  email: string
+): Promise<ActionResult<ForgotPasswordData>> {
   try {
+    const validated = emailSchema.safeParse({ email });
+    if (!validated.success) {
+      return { success: false, error: "Invalid email format" };
+    }
+
     const limit = await checkRateLimit("auth");
     if (!limit.success) return { success: false, error: limit.error };
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: validated.data.email },
     });
 
     if (!user) {
       // Don't reveal if email exists or not for security
-      return { success: true, message: "If the email exists, a reset code has been sent." };
+      return { success: true, data: { message: "If the email exists, a reset code has been sent." } };
     }
 
     const code = generateSecureCode();
@@ -54,7 +69,7 @@ export async function forgotPassword(email: string) {
     const t = await getTranslations({ locale, namespace: "PasswordEmail" });
 
     await sendEmail({
-      to: email,
+      to: validated.data.email,
       subject: "Password Reset Code - AutoSpa Opus",
       component: PasswordChangeCode({
         name: user.name || "User",
@@ -63,19 +78,29 @@ export async function forgotPassword(email: string) {
       }),
     });
 
-    return { success: true, message: "Reset code sent to your email." };
+    return { success: true, data: { message: "Reset code sent to your email." } };
   } catch (error) {
     console.error("Failed to send reset email:", error);
     return { success: false, error: "Failed to send email. Please try again." };
   }
 }
 
+type VerifyResetCodeData = { resetToken: string; message: string };
+
 /**
  * Verifies the 6-digit password reset code entered by the user.
  * Rate limited to 5 requests per minute.
  */
-export async function verifyResetCode(email: string, code: string) {
+export async function verifyResetCode(
+  email: string,
+  code: string
+): Promise<ActionResult<VerifyResetCodeData>> {
   try {
+    const validated = resetCodeSchema.safeParse({ email, code });
+    if (!validated.success) {
+      return { success: false, error: "Invalid email or code format" };
+    }
+
     const limit = await checkRateLimit("auth");
     if (!limit.success) return { success: false, error: limit.error };
 
@@ -108,8 +133,10 @@ export async function verifyResetCode(email: string, code: string) {
 
     return {
       success: true,
-      resetToken: uuidToken,
-      message: "Code verified successfully.",
+      data: {
+        resetToken: uuidToken,
+        message: "Code verified successfully.",
+      },
     };
   } catch (error) {
     console.error("Failed to verify reset code:", error);
@@ -117,12 +144,22 @@ export async function verifyResetCode(email: string, code: string) {
   }
 }
 
+type ResetPasswordData = { message: string };
+
 /**
  * Resets the user's password using a valid reset token.
  * Rate limited to 5 requests per minute.
  */
-export async function resetPassword(resetToken: string, newPassword: string) {
+export async function resetPassword(
+  resetToken: string,
+  newPassword: string
+): Promise<ActionResult<ResetPasswordData>> {
   try {
+    const validated = newPasswordSchema.safeParse({ password: newPassword });
+    if (!validated.success) {
+      return { success: false, error: "Password does not meet requirements" };
+    }
+
     const limit = await checkRateLimit("auth");
     if (!limit.success) return { success: false, error: limit.error };
 
@@ -142,7 +179,7 @@ export async function resetPassword(resetToken: string, newPassword: string) {
       return { success: false, error: "Reset token has expired." };
     }
 
-    const hashedPassword = saltAndHashPassword(newPassword);
+    const hashedPassword = saltAndHashPassword(validated.data.password);
 
     await prisma.$transaction([
       prisma.user.update({
@@ -154,17 +191,21 @@ export async function resetPassword(resetToken: string, newPassword: string) {
       }),
     ]);
 
-    return { success: true, message: "Password reset successfully." };
+    return { success: true, data: { message: "Password reset successfully." } };
   } catch (error) {
     console.error("Failed to reset password:", error);
     return { success: false, error: "Something went wrong. Please try again." };
   }
 }
 
+type ResetTokenData = { email: string; name: string | null };
+
 /**
  * Validates a password reset token for page rendering.
  */
-export async function validateResetToken(resetToken: string) {
+export async function validateResetToken(
+  resetToken: string
+): Promise<ActionResult<ResetTokenData>> {
   try {
     const tokenRecord = await prisma.passwordResetToken.findUnique({
       where: { resetToken },
@@ -172,20 +213,22 @@ export async function validateResetToken(resetToken: string) {
     });
 
     if (!tokenRecord) {
-      return { valid: false, email: null };
+      return { success: false, error: "Invalid reset token" };
     }
 
     if (tokenRecord.expiresAt < new Date()) {
-      return { valid: false, email: null, expired: true };
+      return { success: false, error: "Reset token has expired" };
     }
 
     return {
-      valid: true,
-      email: tokenRecord.user.email,
-      name: tokenRecord.user.name,
+      success: true,
+      data: {
+        email: tokenRecord.user.email ?? "",
+        name: tokenRecord.user.name,
+      },
     };
   } catch (error) {
     console.error("Failed to validate reset token:", error);
-    return { valid: false, email: null };
+    return { success: false, error: "Failed to validate token" };
   }
 }

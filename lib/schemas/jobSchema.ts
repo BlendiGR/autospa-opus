@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { PHONE_REGEX, FINNISH_PLATE_REGEX } from "../constants";
 
-/** Validation schema for tyre form data */
-export const tyreSchema = z.object({
+/** Validation schema for adding a job (tyre storage) to a customer */
+export const jobSchema = z.object({
   plate: z
     .string()
     .min(1, "Plate is required")
@@ -14,4 +14,4 @@ export const tyreSchema = z.object({
   location: z.string().min(1, "Location is required"),
 });
 
-export type TyreFormData = z.infer<typeof tyreSchema>;
+export type JobFormData = z.infer<typeof jobSchema>;

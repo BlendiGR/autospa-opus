@@ -4,11 +4,9 @@ import { useCallback, useMemo } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { receiptSchema, ReceiptFormData, InvoiceItem } from "@/lib/schemas/receiptSchema";
+import { VAT_RATE } from "@/lib/constants";
 
 export type { InvoiceItem };
-
-/** VAT rate in Finland (25.5%) */
-const VAT_RATE = 0.255;
 
 /** Type: Calculated invoice totals */
 type InvoiceTotals = {

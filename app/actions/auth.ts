@@ -3,6 +3,7 @@
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import { checkRateLimit } from "@/lib/ratelimit";
+import { loginSchema } from "@/lib/schemas/loginSchema";
 
 /**
  * Authenticates a user with email and password credentials.
@@ -10,12 +11,18 @@ import { checkRateLimit } from "@/lib/ratelimit";
  */
 export async function login(email: string, password: string) {
   try {
+    // Server-side validation
+    const validated = loginSchema.safeParse({ email, password });
+    if (!validated.success) {
+      return { success: false, error: "Invalid credentials format" };
+    }
+
     const limit = await checkRateLimit("auth");
     if (!limit.success) return { success: false, error: limit.error };
 
     await signIn("credentials", {
-      email,
-      password,
+      email: validated.data.email,
+      password: validated.data.password,
       redirectTo: "/dashboard",
     });
 
@@ -39,3 +46,4 @@ export async function login(email: string, password: string) {
 export async function logout() {
   await signOut({ redirectTo: "/" });
 }
+

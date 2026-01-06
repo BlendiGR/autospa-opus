@@ -182,5 +182,29 @@
     "fetchError": "Dështoi marrja e klientëve",
     "actions": "Veprimet",
     "view": "Shiko"
+  },
+  "CustomerDetail": {
+    "customerProfile": "Profili i Klientit",
+    "email": "Email",
+    "phone": "Telefoni",
+    "plate": "Numri i Targës",
+    "company": "Kompania",
+    "addToCustomer": "Shto tek Klienti",
+    "addJob": "Ruajtje Gomash",
+    "addInvoice": "Shto Punë",
+    "jobPlate": "Numri i Targës",
+    "jobPhone": "Numri i Telefonit",
+    "jobLocation": "Vendndodhja e Ruajtjes",
+    "jobLocationPlaceholder": "p.sh., A1, B2, Rafti 3",
+    "addJobButton": "Shto Ruajtje",
+    "jobSuccess": "Ruajtja e gomash u shtua me sukses!",
+    "invoicePlate": "Numri i Targës",
+    "invoiceItems": "Artikujt e Punës",
+    "addItem": "Shto Artikull",
+    "servicePlaceholder": "p.sh., Larje Makine",
+    "removeItem": "Fshi",
+    "addInvoiceButton": "Krijo Punën",
+    "invoiceSuccess": "Puna u krijua me sukses!",
+    "genericError": "Diçka shkoi keq"
   }
 }

@@ -182,5 +182,29 @@
     "fetchError": "Asiakkaiden haku epäonnistui",
     "actions": "Toiminnot",
     "view": "Näytä"
+  },
+  "CustomerDetail": {
+    "customerProfile": "Asiakasprofiili",
+    "email": "Sähköposti",
+    "phone": "Puhelin",
+    "plate": "Rekisterinumero",
+    "company": "Yritys",
+    "addToCustomer": "Lisää Asiakkaalle",
+    "addJob": "Rengassäilytys",
+    "addInvoice": "Lisää Työ",
+    "jobPlate": "Rekisterinumero",
+    "jobPhone": "Puhelinnumero",
+    "jobLocation": "Säilytyspaikka",
+    "jobLocationPlaceholder": "esim., A1, B2, Hylly 3",
+    "addJobButton": "Lisää Säilytys",
+    "jobSuccess": "Rengassäilytys lisätty onnistuneesti!",
+    "invoicePlate": "Rekisterinumero",
+    "invoiceItems": "Työn Rivit",
+    "addItem": "Lisää Rivi",
+    "servicePlaceholder": "esim., Autopesu",
+    "removeItem": "Poista",
+    "addInvoiceButton": "Luo Työ",
+    "invoiceSuccess": "Työ luotu onnistuneesti!",
+    "genericError": "Jotain meni pieleen"
   }
 }

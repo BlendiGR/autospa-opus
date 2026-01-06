@@ -6,7 +6,7 @@ const publicRoutes = ["/", "/forgot-password", "/test-auth"];
 /** Route prefixes accessible without authentication */
 const publicPrefixes = ["/reset-password"];
 
-/** Auth middleware - redirects unauthenticated users to login, authenticated users away from login */
+/** Auth middleware redirects unauthenticated users to login, authenticated users away from login */
 export default auth((req) => {
   const isPublicRoute =
     publicRoutes.includes(req.nextUrl.pathname) ||
@@ -25,7 +25,7 @@ export default auth((req) => {
   }
 });
 
-/** Matcher config - excludes static assets from middleware */
+/** Matcher config excludes static assets from middleware */
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$|.*\\.webp$|.*\\.ico$).*)",

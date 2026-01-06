@@ -6,6 +6,7 @@ import { Undo2, Package } from "lucide-react";
 import ConfirmDialog from "../ui/confirm-dialog";
 import { useTranslations } from "next-intl";
 import { toggleTyreStatus } from "@/app/actions/tyrehotel";
+import { useLoading } from "@/hooks";
 
 interface TyreCardProps {
   tyre: {
@@ -28,7 +29,7 @@ interface TyreCardProps {
  */
 export default function TyreCard({ tyre }: TyreCardProps) {
   const [showConfirm, setShowConfirm] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { loading, withLoading } = useLoading();
   const t = useTranslations("TyreCard");
   const tConfirm = useTranslations("ConfirmDialog");
 
@@ -37,13 +38,10 @@ export default function TyreCard({ tyre }: TyreCardProps) {
   const formattedDate = displayDate ? new Date(displayDate).toLocaleDateString("fi-FI") : "—";
 
   const handleToggle = async () => {
-    setIsLoading(true);
-    try {
+    await withLoading(async () => {
       await toggleTyreStatus(id);
-    } finally {
-      setIsLoading(false);
       setShowConfirm(false);
-    }
+    });
   };
 
   return (
@@ -83,7 +81,7 @@ export default function TyreCard({ tyre }: TyreCardProps) {
           size="sm"
           onClick={() => setShowConfirm(true)}
           className="rounded-xl"
-          disabled={isLoading}
+          disabled={loading}
         >
           {isStored ? (
             <>

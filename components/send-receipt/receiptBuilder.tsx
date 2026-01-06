@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { useLoading, useInvoiceForm } from "@/hooks";
@@ -9,11 +8,22 @@ import SuccessMessage from "./successMessage";
 import ReceiptForm from "./receiptForm";
 import ReceiptPreviewSection from "./receiptPreviewSection";
 
+/**
+ * ReceiptBuilder - Manages the receipt form and preview.
+ *
+ * Handles form submission with loading/success/error states using useLoading hook.
+ */
 export default function ReceiptBuilder() {
   const t = useTranslations("SendReceipt");
-  const { loading, withLoading } = useLoading();
-  const [success, setSuccess] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const {
+    loading,
+    success,
+    setSuccess,
+    serverError,
+    setServerError,
+    withLoading,
+    resetState,
+  } = useLoading();
 
   const { form, register, fields, watchedValues, addItem, removeItem, resetForm, canRemoveItem } =
     useInvoiceForm();
@@ -24,8 +34,6 @@ export default function ReceiptBuilder() {
   } = form;
 
   const onSubmit = handleSubmit(async (data) => {
-    setServerError(null);
-
     await withLoading(async () => {
       const result = await sendReceipt(data);
 
@@ -36,7 +44,7 @@ export default function ReceiptBuilder() {
 
       setSuccess(true);
       setTimeout(() => {
-        setSuccess(false);
+        resetState();
         resetForm();
       }, 3000);
     });

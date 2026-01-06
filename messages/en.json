@@ -182,5 +182,29 @@
     "fetchError": "Failed to fetch customers",
     "actions": "Actions",
     "view": "View"
+  },
+  "CustomerDetail": {
+    "customerProfile": "Customer Profile",
+    "email": "Email",
+    "phone": "Phone",
+    "plate": "Plate Number",
+    "company": "Company",
+    "addToCustomer": "Add to Customer",
+    "addJob": "Tyre Storage",
+    "addInvoice": "Add Job",
+    "jobPlate": "Plate Number",
+    "jobPhone": "Phone Number",
+    "jobLocation": "Storage Location",
+    "jobLocationPlaceholder": "e.g., A1, B2, Shelf 3",
+    "addJobButton": "Add Storage",
+    "jobSuccess": "Tyre storage added successfully!",
+    "invoicePlate": "Plate Number",
+    "invoiceItems": "Job Items",
+    "addItem": "Add Item",
+    "servicePlaceholder": "e.g., Carwash",
+    "removeItem": "Remove",
+    "addInvoiceButton": "Create Job",
+    "invoiceSuccess": "Job created successfully!",
+    "genericError": "Something went wrong"
   }
 }
