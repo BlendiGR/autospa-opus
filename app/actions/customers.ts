@@ -171,7 +171,7 @@ export async function addInvoiceToCustomer(
       (sum, item) => sum + parseFloat(item.price),
       0
     );
-    const tax = subtotal * (VAT_RATE / 100);
+    const tax = subtotal * VAT_RATE;
     const total = subtotal;
 
     await prisma.invoices.create({
