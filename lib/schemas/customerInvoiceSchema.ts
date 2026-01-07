@@ -3,7 +3,7 @@ import { FINNISH_PLATE_REGEX } from "../constants";
 
 /** Single invoice item schema */
 const invoiceItemSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   service: z.string().min(1, "Service name is required"),
   price: z
     .string()

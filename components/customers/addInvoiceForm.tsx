@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Check, Car, Plus } from "lucide-react";
+import { Car, Plus } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,7 +36,7 @@ export default function AddInvoiceForm({ customerId }: AddInvoiceFormProps) {
     resolver: zodResolver(customerInvoiceSchema),
     defaultValues: {
       plate: "",
-      items: [{ id: crypto.randomUUID(), service: "", price: "" }],
+      items: [{ service: "", price: "" }],
     },
   });
 
@@ -46,7 +46,7 @@ export default function AddInvoiceForm({ customerId }: AddInvoiceFormProps) {
   });
 
   const addItem = () => {
-    append({ id: crypto.randomUUID(), service: "", price: "" });
+    append({ service: "", price: "" });
   };
 
   const removeItem = (index: number) => {
@@ -59,7 +59,7 @@ export default function AddInvoiceForm({ customerId }: AddInvoiceFormProps) {
     if (success) {
       const timer = setTimeout(() => {
         resetState();
-        reset({ plate: "", items: [{ id: crypto.randomUUID(), service: "", price: "" }] });
+        reset({ plate: "", items: [{ service: "", price: "" }] });
       }, 2000);
       return () => clearTimeout(timer);
     }

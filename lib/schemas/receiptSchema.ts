@@ -5,7 +5,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Single invoice item schema */
 export const invoiceItemSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   service: z.string().min(1, "Service name is required"),
   price: z
     .string()

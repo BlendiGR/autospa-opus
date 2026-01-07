@@ -6,6 +6,7 @@ import Image from "next/image";
 import SignOutBtn from "../ui/signoutbtn";
 import MobileNav from "./MobileNav";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
+import { Settings } from "lucide-react";
 
 export default async function NavBar() {
   const t = await getTranslations("Navigation");
@@ -21,6 +22,7 @@ export default async function NavBar() {
         {navItems.map((item) => (
           <NavButton key={item.href} href={item.href} label={t(item.key)} />
         ))}
+        <NavButton href="/settings" label={""} icon={<Settings />} />
         <LanguageSwitcher />
         <SignOutBtn />
       </div>

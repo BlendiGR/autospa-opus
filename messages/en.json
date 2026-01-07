@@ -228,5 +228,21 @@
     "tyreStorage": "Tyre Storage",
     "job": "Job",
     "total": "Total Cost"
+  },
+  "Settings": {
+    "userInfo": "User Information",
+    "userInfoSubtitle": "Your account details",
+    "name": "Name",
+    "email": "Email",
+    "bugReport": "Report a Bug",
+    "bugReportSubtitle": "Help us improve by reporting issues",
+    "subject": "Subject",
+    "subjectPlaceholder": "Brief description of the issue",
+    "description": "Description",
+    "descriptionPlaceholder": "Please describe the bug in detail...",
+    "submitBugReport": "Submit Report",
+    "bugReportSuccess": "Report Submitted!",
+    "bugReportSuccessDescription": "Thank you for your feedback. We'll look into it.",
+    "genericError": "Something went wrong. Please try again."
   }
 }

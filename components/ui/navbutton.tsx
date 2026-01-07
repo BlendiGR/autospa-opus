@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function NavButton({ href, label }: { href: string; label: string }) {
+export default function NavButton({ href, label, icon }: { href: string; label: string; icon?: React.ReactNode }) {
   const pathname = usePathname();
   const isActive = pathname.startsWith(href);
 
@@ -13,6 +13,7 @@ export default function NavButton({ href, label }: { href: string; label: string
 
   return (
     <Link href={href} className={`py-2 px-4 rounded-lg ${btnColor}`}>
+      {icon && icon}
       {label}
     </Link>
   );

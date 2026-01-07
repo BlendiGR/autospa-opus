@@ -228,5 +228,21 @@
     "tyreStorage": "Ruajtje Gomash",
     "job": "Punë",
     "total": "Totali"
+  },
+  "Settings": {
+    "userInfo": "Informacioni i Përdoruesit",
+    "userInfoSubtitle": "Detajet e llogarisë tuaj",
+    "name": "Emri",
+    "email": "Email",
+    "bugReport": "Raporto një Defekt",
+    "bugReportSubtitle": "Na ndihmoni të përmirësojmë duke raportuar probleme",
+    "subject": "Tema",
+    "subjectPlaceholder": "Përshkrim i shkurtër i problemit",
+    "description": "Përshkrimi",
+    "descriptionPlaceholder": "Ju lutem përshkruani defektin në detaje...",
+    "submitBugReport": "Dërgo Raportin",
+    "bugReportSuccess": "Raporti u Dërgua!",
+    "bugReportSuccessDescription": "Faleminderit për reagimin tuaj. Do ta shqyrtojmë.",
+    "genericError": "Diçka shkoi keq. Ju lutem provoni përsëri."
   }
 }

@@ -228,5 +228,21 @@
     "tyreStorage": "Rengassäilytys",
     "job": "Työ",
     "total": "Yhteensä"
+  },
+  "Settings": {
+    "userInfo": "Käyttäjätiedot",
+    "userInfoSubtitle": "Tilisi tiedot",
+    "name": "Nimi",
+    "email": "Sähköposti",
+    "bugReport": "Ilmoita Virheestä",
+    "bugReportSubtitle": "Auta meitä parantamaan ilmoittamalla ongelmista",
+    "subject": "Aihe",
+    "subjectPlaceholder": "Lyhyt kuvaus ongelmasta",
+    "description": "Kuvaus",
+    "descriptionPlaceholder": "Kuvaile virhe yksityiskohtaisesti...",
+    "submitBugReport": "Lähetä Ilmoitus",
+    "bugReportSuccess": "Ilmoitus Lähetetty!",
+    "bugReportSuccessDescription": "Kiitos palautteestasi. Tutkimme asiaa.",
+    "genericError": "Jotain meni pieleen. Yritä uudelleen."
   }
 }
