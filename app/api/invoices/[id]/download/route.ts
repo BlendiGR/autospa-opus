@@ -68,7 +68,7 @@ export async function GET(
     }));
 
     const pdfComponent = ReceiptPDF({
-      customerName: invoice.customer?.name || "Asiakkas",
+      customerName: invoice.customer?.name || undefined,
       plate: invoice.plate,
       items: items,
       date,

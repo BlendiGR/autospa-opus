@@ -262,15 +262,15 @@ const ReceiptPDF = ({
             <Image src={logoUrl} style={styles.logo} />
             <View style={styles.contactInfo}>
               <View style={styles.contactRow}>
-                <Text style={styles.contactLabel}>{t("phoneLabel")}</Text>
+                <Text style={styles.contactLabel}>{t("invoicePhoneLabel")}</Text>
                 <Text style={styles.contactValue}>{businessInfo.phone}</Text>
               </View>
               <View style={styles.contactRow}>
-                <Text style={styles.contactLabel}>{t("emailLabel")}</Text>
+                <Text style={styles.contactLabel}>{t("invoiceEmailLabel")}</Text>
                 <Text style={styles.contactValue}>{businessInfo.email}</Text>
               </View>
               <View style={styles.contactRow}>
-                <Text style={styles.contactLabel}>{t("websiteLabel")}</Text>
+                <Text style={styles.contactLabel}>{t("invoiceWebsiteLabel")}</Text>
                 <Text style={styles.contactValue}>{businessInfo.website}</Text>
               </View>
             </View>
@@ -282,11 +282,11 @@ const ReceiptPDF = ({
             <Text style={styles.date}>{date}</Text>
             <View style={styles.businessInfo}>
               <View style={styles.businessRow}>
-                <Text style={styles.businessLabel}>{t("addressLabel")}</Text>
+                <Text style={styles.businessLabel}>{t("invoiceAddressLabel")}</Text>
                 <Text style={styles.businessValue}>{businessInfo.address}</Text>
               </View>
               <View style={styles.businessRow}>
-                <Text style={styles.businessLabel}>{t("businessIdLabel")}</Text>
+                <Text style={styles.businessLabel}>{t("invoiceBusinessIdLabel")}</Text>
                 <Text style={styles.businessValue}>{businessInfo.ytunnus}</Text>
               </View>
             </View>
