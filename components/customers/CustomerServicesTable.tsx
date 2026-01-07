@@ -6,10 +6,16 @@ import { useTranslations } from "next-intl";
 import { deleteInvoice, deleteTyre } from "@/app/actions/customers";
 import type { Tyre, Invoices } from "@/app/generated/prisma/client";
 
-// Define a plain invoice type safe for client components (converting Decimal to number)
+type InvoiceItem = {
+  id: number;
+  service: string;
+  price: any;
+};
+
 export type PlainInvoice = Omit<Invoices, "totalAmount" | "totalTax"> & {
   totalAmount: number;
   totalTax: number;
+  items: InvoiceItem[];
 };
 
 interface CustomerServicesTableProps {
@@ -50,7 +56,7 @@ export default function CustomerServicesTable({
       type: "job" as const,
       date: inv.createdAt,
       plate: inv.plate,
-      details: inv.services.join(", "),
+      details: inv.items?.map((i) => i.service).join(", ") || "—",
       amount: Number(inv.totalAmount),
     })),
   ].sort((a, b) => b.date.getTime() - a.date.getTime());

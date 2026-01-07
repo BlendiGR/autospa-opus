@@ -1,5 +1,6 @@
 import CustomerSearch from "@/components/customers/customerSearch";
 import CustomersTable from "@/components/customers/customersTable";
+import UnassignedInvoices from "@/components/customers/UnassignedInvoices";
 import { CustomersTableSkeleton } from "@/components/customers/skeletons/CustomersTableSkeleton";
 import { Suspense } from "react";
 
@@ -13,6 +14,11 @@ export default async function Customers({ searchParams }: CustomersPageProps) {
 
   return (
     <div className="w-full max-w-384 mt-4 mx-auto">
+      {/* Unassigned invoices section */}
+      <Suspense fallback={null}>
+        <UnassignedInvoices />
+      </Suspense>
+
       {/* Search section */}
       <CustomerSearch />
 
@@ -23,3 +29,4 @@ export default async function Customers({ searchParams }: CustomersPageProps) {
     </div>
   );
 }
+

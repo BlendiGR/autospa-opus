@@ -24,11 +24,22 @@ model Tyre {
   @@index([number])
 }
 
+
+model InvoiceItem {
+  id        Int      @id @default(autoincrement())
+  invoiceId Int
+  service   String
+  price     Decimal
+  invoice   Invoices @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  
+  @@index([invoiceId])
+}
+
 model Invoices {
   id          Int       @id @default(autoincrement())
   customerId  Int?
   plate       String    @db.Citext
-  services    String[]
+  items       InvoiceItem[]
   totalAmount Decimal
   totalTax    Decimal
   createdAt   DateTime  @default(now())

@@ -192,7 +192,8 @@
     "noCustomers": "Nuk u gjetën klientë",
     "fetchError": "Dështoi marrja e klientëve",
     "actions": "Veprimet",
-    "view": "Shiko"
+    "view": "Shiko",
+    "downloadInvoice": "Shkarko Faturën"
   },
   "CustomerDetail": {
     "customerProfile": "Profili i Klientit",

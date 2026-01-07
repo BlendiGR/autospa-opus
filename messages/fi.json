@@ -192,7 +192,14 @@
     "noCustomers": "Asiakkaita ei löytynyt",
     "fetchError": "Asiakkaiden haku epäonnistui",
     "actions": "Toiminnot",
-    "view": "Näytä"
+    "view": "Näytä",
+    "unassignedInvoices": "Linkittämättömät Laskut",
+    "unassignedInvoicesSubtitle": "Laskut joita ei ole yhdistetty asiakkaaseen",
+    "invoicePlate": "Rekisterinumero",
+    "invoiceServices": "Palvelut",
+    "invoiceTotal": "Yhteensä",
+    "invoiceDate": "Päivämäärä",
+    "downloadInvoice": "Lataa Kuitti"
   },
   "CustomerDetail": {
     "customerProfile": "Asiakasprofiili",
@@ -242,7 +249,6 @@
     "descriptionPlaceholder": "Kuvaile virhe yksityiskohtaisesti...",
     "submitBugReport": "Lähetä Ilmoitus",
     "bugReportSuccess": "Ilmoitus Lähetetty!",
-    "bugReportSuccessDescription": "Kiitos palautteestasi. Tutkimme asiaa.",
-    "genericError": "Jotain meni pieleen. Yritä uudelleen."
+    "downloadInvoice": "Lataa Kuitti"
   }
 }

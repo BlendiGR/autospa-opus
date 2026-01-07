@@ -192,7 +192,14 @@
     "noCustomers": "No customers found",
     "fetchError": "Failed to fetch customers",
     "actions": "Actions",
-    "view": "View"
+    "view": "View",
+    "unassignedInvoices": "Unassigned Invoices",
+    "unassignedInvoicesSubtitle": "Invoices not linked to any customer",
+    "invoicePlate": "Plate",
+    "invoiceServices": "Services",
+    "invoiceTotal": "Total",
+    "invoiceDate": "Date",
+    "downloadInvoice": "Download Invoice"
   },
   "CustomerDetail": {
     "customerProfile": "Customer Profile",
@@ -243,6 +250,6 @@
     "submitBugReport": "Submit Report",
     "bugReportSuccess": "Report Submitted!",
     "bugReportSuccessDescription": "Thank you for your feedback. We'll look into it.",
-    "genericError": "Something went wrong. Please try again."
+    "downloadInvoice": "Download Invoice"
   }
 }

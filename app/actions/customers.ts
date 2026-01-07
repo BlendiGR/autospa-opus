@@ -10,12 +10,12 @@ import {
 } from "@/lib/schemas/customerInvoiceSchema";
 import { CUSTOMERS_PER_PAGE, VAT_RATE } from "@/lib/constants";
 import type { ActionResult } from "@/lib/action-result";
-import type { Customer, Tyre, Invoices } from "@/app/generated/prisma/client";
+import type { Customer, Tyre, Invoices, InvoiceItem } from "@/app/generated/prisma/client";
 import { normalizeNumber } from "@/lib/utils/normalizeNumber";
 
 type CustomerWithRelations = Customer & {
   tyres: Tyre[];
-  invoices: Invoices[];
+  invoices: (Invoices & { items: InvoiceItem[] })[];
 };
 
 type CustomersData = {
@@ -107,7 +107,7 @@ export async function getCustomerById(id: number): Promise<ActionResult<Customer
       return { success: false, error: "Customer not found" };
     }
 
-    return { success: true, data: customer };
+    return { success: true, data: customer as unknown as CustomerWithRelations };
   } catch {
     return { success: false, error: "Failed to fetch customer" };
   }
@@ -177,7 +177,12 @@ export async function addInvoiceToCustomer(
     await prisma.invoices.create({
       data: {
         plate: validatedData.data.plate.toUpperCase(),
-        services: services,
+        items: {
+          create: validatedData.data.items.map((item) => ({
+            service: item.service,
+            price: parseFloat(item.price),
+          })),
+        },
         totalAmount: total,
         totalTax: tax,
         customerId: customerId,

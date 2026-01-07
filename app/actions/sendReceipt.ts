@@ -8,6 +8,8 @@ import ReceiptPDF from "@/components/pdf/ReceiptPDF";
 import { APP_URL } from "@/lib/constants";
 import { requireAuth } from "@/lib/auth-utils";
 import { checkRateLimit } from "@/lib/ratelimit";
+import { prisma } from "@/prisma/prisma";
+import { ActionResult } from "@/lib/action-result";
 
 /** Date format locale mapping */
 const DATE_LOCALES: Record<ReceiptLanguage, string> = {
@@ -22,9 +24,33 @@ const EMAIL_SUBJECTS: Record<ReceiptLanguage, string> = {
 };
 
 /**
- * Sends a receipt email with an attached PDF invoice.
+ * Finds a customer ID by email first, then by plate (via Tyre).
  */
-export async function sendReceipt(data: ReceiptFormData) {
+async function findCustomerId(email: string, plate: string): Promise<number | null> {
+  // Try to find by email first
+  const customerByEmail = await prisma.customer.findUnique({
+    where: { email },
+    select: { id: true },
+  });
+  if (customerByEmail) return customerByEmail.id;
+
+  // Try to find by plate via Tyre
+  const tyre = await prisma.tyre.findUnique({
+    where: { plate },
+    select: { customerId: true },
+  });
+  if (tyre?.customerId) return tyre.customerId;
+
+  return null;
+}
+
+
+
+/**
+ * Sends a receipt email with an attached PDF invoice.
+ * Saves the invoice to the database and links to customer if found.
+ */
+export async function sendReceipt(data: ReceiptFormData): Promise<ActionResult<null>> {
   try {
     await requireAuth();
 
@@ -70,7 +96,7 @@ export async function sendReceipt(data: ReceiptFormData) {
     const pdfComponent = ReceiptPDF({
       customerName: data.customerName,
       plate: data.plate,
-      items: data.items ,
+      items: data.items,
       date,
       logoUrl: `${APP_URL}/logo-opus.png`,
       t,
@@ -98,9 +124,34 @@ export async function sendReceipt(data: ReceiptFormData) {
       ],
     });
 
-    return { success: true };
+    // Calculate totals
+    const VAT_RATE = 0.255;
+    const totalAmount = data.items.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+    const totalTax = totalAmount * (VAT_RATE / (1 + VAT_RATE));
+
+    // Find customer by email or plate
+    const customerId = await findCustomerId(data.email, data.plate);
+
+    // Save invoice to database
+    await prisma.invoices.create({
+      data: {
+        plate: data.plate,
+        items: {
+          create: data.items.map((item) => ({
+            service: item.service,
+            price: parseFloat(item.price),
+          })),
+        },
+        totalAmount: parseFloat(totalAmount.toFixed(2)),
+        totalTax: parseFloat(totalTax.toFixed(2)),
+        customerId,
+      },
+    });
+
+    return { success: true, data: null };
   } catch (error) {
     console.error("Failed to send receipt:", error);
     return { success: false, error: "Failed to send receipt. Please try again." };
   }
 }
+

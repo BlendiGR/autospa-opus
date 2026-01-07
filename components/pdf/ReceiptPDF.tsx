@@ -27,6 +27,9 @@ export type ReceiptPDFProps = {
     address: string;
     ytunnus: string;
   };
+  overrideTotal?: number;
+  overrideVat?: number;
+  overrideSubtotal?: number;
 };
 
 const styles = StyleSheet.create({
@@ -234,12 +237,19 @@ const ReceiptPDF = ({
   logoUrl,
   t,
   businessInfo,
+  overrideTotal,
+  overrideSubtotal,
+  overrideVat,
 }: ReceiptPDFProps) => {
   const validItems = items.filter((item) => item.service && item.price);
-  const total = validItems.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+  const calculatedTotal = validItems.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
   const vatRate = 0.255;
-  const vatAmount = total * (vatRate / (1 + vatRate));
-  const subtotal = total - vatAmount;
+  const calculatedVat = calculatedTotal * (vatRate / (1 + vatRate));
+  const calculatedSubtotal = calculatedTotal - calculatedVat;
+
+  const total = overrideTotal ?? calculatedTotal;
+  const vatAmount = overrideVat ?? calculatedVat;
+  const subtotal = overrideSubtotal ?? calculatedSubtotal;
 
   return (
     <Document>
