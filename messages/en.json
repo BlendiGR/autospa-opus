@@ -82,7 +82,18 @@
     "cancel": "Cancel",
     "submit": "Add Tyre",
     "success": "Tyre added successfully!",
-    "genericError": "Something went wrong"
+    "genericError": "Something went wrong",
+    "lookingUp": "Looking up customer",
+    "foundCustomer": "Found customer",
+    "linkToCustomer": "Link",
+    "noCustomerFound": "No customer with this phone",
+    "createCustomer": "Create Customer",
+    "skip": "Skip",
+    "customerName": "Customer Name",
+    "customerEmail": "Email (optional)",
+    "customerCompany": "Company (optional)",
+    "confirmCreate": "Confirm",
+    "linkedTo": "Linked to"
   },
   "ResetPassword": {
     "title": "Reset Password",

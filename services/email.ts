@@ -20,18 +20,30 @@ export type EmailAttachment = {
  * @returns Configured Nodemailer transporter
  */
 const getTransporter = (): Transporter<SMTPTransport.SentMessageInfo> => {
-  if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST as string,
-      port: parseInt(process.env.EMAIL_PORT as string),
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER as string,
-        pass: process.env.EMAIL_PASS as string,
-      },
-    } as SMTPTransport.Options);
+  try {
+    if (!transporter) {
+      if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        throw new Error("Missing email configuration environment variables");
+      }
+
+      transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST as string,
+        port: parseInt(process.env.EMAIL_PORT as string || "587"),
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER as string,
+          pass: process.env.EMAIL_PASS as string,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      } as SMTPTransport.Options);
+    }
+    return transporter;
+  } catch (error) {
+    console.error("Failed to initialize email transporter:", error);
+    throw error;
   }
-  return transporter;
 };
 
 /**
@@ -54,19 +66,24 @@ export const sendEmail = async ({
   component: ReactElement;
   attachments?: EmailAttachment[];
 }) => {
-  const transport = getTransporter();
+  try {
+    const transport = getTransporter();
 
-  const emailHtml = await render(component);
+    const emailHtml = await render(component);
 
-  return transport.sendMail({
-    from: "Autospa Opus <blendigrajqevci@gmail.com>",
-    to: to,
-    subject: subject,
-    html: emailHtml,
-    attachments: attachments?.map((att) => ({
-      filename: att.filename,
-      content: att.content,
-      contentType: att.contentType || "application/octet-stream",
-    })),
-  });
+    return await transport.sendMail({
+      from: `Autospa Opus <${process.env.EMAIL_USER}>`,
+      to: to,
+      subject: subject,
+      html: emailHtml,
+      attachments: attachments?.map((att) => ({
+        filename: att.filename,
+        content: att.content,
+        contentType: att.contentType || "application/octet-stream",
+      })),
+    });
+  } catch (error) {
+    console.error("Failed to send email:", error);
+    throw new Error(error instanceof Error ? error.message : "Failed to send email");
+  }
 };

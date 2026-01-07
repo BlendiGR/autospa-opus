@@ -82,7 +82,18 @@
     "cancel": "Peruuta",
     "submit": "Lisää Rengas",
     "success": "Rengas lisätty onnistuneesti!",
-    "genericError": "Jotain meni pieleen"
+    "genericError": "Jotain meni pieleen",
+    "lookingUp": "Etsitään asiakasta",
+    "foundCustomer": "Asiakas löytyi",
+    "linkToCustomer": "Linkitä",
+    "noCustomerFound": "Ei asiakasta tällä numerolla",
+    "createCustomer": "Luo Asiakas",
+    "skip": "Ohita",
+    "customerName": "Asiakkaan Nimi",
+    "customerEmail": "Sähköposti (valinnainen)",
+    "customerCompany": "Yritys (valinnainen)",
+    "confirmCreate": "Vahvista",
+    "linkedTo": "Linkitetty asiakkaaseen"
   },
   "ResetPassword": {
     "title": "Vaihda Salasana",

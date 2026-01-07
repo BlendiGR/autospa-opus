@@ -14,7 +14,7 @@ export const APP_NAME = "AutoSpa Opus";
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 /** Phone number regex supports international formats like +358 40 123 4567, 040-1234567, etc. */
-export const PHONE_REGEX = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/;
+export const PHONE_REGEX = /^(?:\+[1-9]\d{1,3}|0)(?:\s?[0-9]){6,14}$/;
 
 /** Finnish plate format: ABC-123, AB-1, ABC-1, etc. */
 export const FINNISH_PLATE_REGEX = /^[A-ZÄÖÅ]{2,3}-\d{1,3}$/i;

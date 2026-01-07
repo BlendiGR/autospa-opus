@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { User, Mail, Phone, Car, Building2 } from "lucide-react";
+import { User, Mail, Phone, Building2 } from "lucide-react";
 
 interface CustomerInfoProps {
   customer: {
@@ -7,7 +7,6 @@ interface CustomerInfoProps {
     name: string;
     email: string | null;
     phone: string | null;
-    plate: string | null;
     company: string | null;
   };
 }
@@ -47,17 +46,6 @@ export default async function CustomerInfo({ customer }: CustomerInfoProps) {
           <div>
             <p className="text-xs text-gray-500">{t("phone")}</p>
             <p className="font-medium text-gray-900">{customer.phone || "—"}</p>
-          </div>
-        </div>
-
-        {/* Plate */}
-        <div className="flex items-center gap-3 p-4 bg-white rounded-xl">
-          <div className="p-2 bg-gray-100 rounded-lg">
-            <Car className="w-5 h-5 text-gray-600" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">{t("plate")}</p>
-            <p className="font-medium text-gray-900">{customer.plate || "—"}</p>
           </div>
         </div>
 

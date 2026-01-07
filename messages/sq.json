@@ -82,7 +82,18 @@
     "cancel": "Anulo",
     "submit": "Shto Gomën",
     "success": "Goma u shtua me sukses!",
-    "genericError": "Diçka shkoi keq"
+    "genericError": "Diçka shkoi keq",
+    "lookingUp": "Duke kërkuar klientin",
+    "foundCustomer": "Klienti u gjet",
+    "linkToCustomer": "Lidh",
+    "noCustomerFound": "Nuk u gjet klient me këtë numër",
+    "createCustomer": "Krijo Klient",
+    "skip": "Kalo",
+    "customerName": "Emri i Klientit",
+    "customerEmail": "Email (opsional)",
+    "customerCompany": "Kompania (opsional)",
+    "confirmCreate": "Konfirmo",
+    "linkedTo": "I lidhur me"
   },
   "ResetPassword": {
     "title": "Ndrysho Fjalëkalimin",

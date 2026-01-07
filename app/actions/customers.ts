@@ -11,6 +11,7 @@ import {
 import { CUSTOMERS_PER_PAGE, VAT_RATE } from "@/lib/constants";
 import type { ActionResult } from "@/lib/action-result";
 import type { Customer, Tyre, Invoices } from "@/app/generated/prisma/client";
+import { normalizeNumber } from "@/lib/utils/normalizeNumber";
 
 type CustomerWithRelations = Customer & {
   tyres: Tyre[];
@@ -64,18 +65,18 @@ export async function createCustomer(data: {
   phone: string;
   email?: string;
   company?: string;
-  plate?: string;
 }): Promise<ActionResult<CreatedCustomer>> {
   try {
     await requireAuth();
 
+    //TODO: validate data.
+
     const newCustomer = await prisma.customer.create({
       data: {
         name: data.name,
-        phone: data.phone,
+        phone: normalizeNumber(data.phone),
         email: data.email || null,
         company: data.company || null,
-        plate: data.plate ? data.plate.toUpperCase() : null,
       },
     });
 
@@ -170,8 +171,8 @@ export async function addInvoiceToCustomer(
       (sum, item) => sum + parseFloat(item.price),
       0
     );
-    const tax = subtotal * VAT_RATE;
-    const total = subtotal + tax;
+    const tax = subtotal * (VAT_RATE / 100);
+    const total = subtotal;
 
     await prisma.invoices.create({
       data: {

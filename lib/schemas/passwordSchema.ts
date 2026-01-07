@@ -3,12 +3,12 @@ import { PASSWORD_REGEX } from "../constants";
 
 /** Email-only validation for forgot password */
 export const emailSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
 });
 
 /** 6-digit code validation for password reset verification */
 export const resetCodeSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   code: z.string().length(6, "Code must be 6 characters"),
 });
 

@@ -36,7 +36,6 @@ export default function AddCustomerModal({
           email: data.customerEmail,
           phone: data.customerPhone,
           company: data.customerCompany,
-          plate: data.customerPlate,
         });
         onClose();
       });
@@ -58,9 +57,6 @@ export default function AddCustomerModal({
             </FormField>
             <FormField label={t("customerPhone")} error={errors.customerPhone?.message}>
               <Input {...register("customerPhone")} error={!!errors.customerPhone} />
-            </FormField>
-            <FormField label={t("customerPlate")} error={errors.customerPlate?.message}>
-              <Input {...register("customerPlate")} error={!!errors.customerPlate} />
             </FormField>
             <FormField label={t("customerCompany")} error={errors.customerCompany?.message}>
               <Input {...register("customerCompany")} error={!!errors.customerCompany} />

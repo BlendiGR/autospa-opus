@@ -19,10 +19,15 @@ export async function generatePDF(
   component: ReactElement<DocumentProps>,
   filename: string
 ): Promise<PDFResult> {
-  const buffer = await renderToBuffer(component);
+  try {
+    const buffer = await renderToBuffer(component);
 
-  return {
-    buffer: Buffer.from(buffer),
-    filename,
-  };
+    return {
+      buffer: Buffer.from(buffer),
+      filename,
+    };
+  } catch (error) {
+    console.error("Failed to generate PDF:", error);
+    throw new Error(error instanceof Error ? error.message : "Failed to generate PDF");
+  }
 }

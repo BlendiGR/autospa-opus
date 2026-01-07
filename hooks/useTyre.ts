@@ -5,15 +5,13 @@ import type { TyreFormData } from "@/lib/schemas/tyreSchema";
 
 /**
  * Provides functionality to create a new tyre storage record.
- *
- * @returns Object containing create function, loading state, and error message
  */
 export function useCreateTyre() {
   const { loading, withLoading } = useLoading(false);
   const [error, setError] = useState<string | null>(null);
 
   const create = useCallback(
-    async (data: TyreFormData) => {
+    async (data: TyreFormData & { customerId?: number }) => {
       setError(null);
       return await withLoading(async () => {
         const result = await createTyre(data);

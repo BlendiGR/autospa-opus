@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
-import { Check } from "lucide-react";
 
 import Modal from "../ui/modal";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import SuccessMessage from "../ui/successMessage";
+import CustomerSuggestion from "./CustomerSuggestion";
 
 import { useCreateTyre } from "@/hooks";
 import { tyreSchema, TyreFormData } from "@/lib/schemas/tyreSchema";
 import { fetchLocations } from "@/app/actions/tyrehotel";
+import { createCustomer } from "@/app/actions/customers";
 
 interface AddTyreModalProps {
   isOpen: boolean;
@@ -29,11 +30,15 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
   const [locations, setLocations] = useState<string[]>([]);
   const [success, setSuccess] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+  const [customerLinked, setCustomerLinked] = useState(false);
+  const [linkedCustomerName, setLinkedCustomerName] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<TyreFormData>({
     resolver: zodResolver(tyreSchema),
@@ -44,14 +49,20 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
     },
   });
 
-  // Reset state and load data when modal opens
+  // Watch phone field for CustomerSuggestion
+  const phoneValue = useWatch({ control, name: "number" });
+
+  // Reset state when modal opens
   useEffect(() => {
     if (!isOpen) return;
 
-    // Reset state synchronously before fetching
     reset();
+    setSuccess(false);
+    setServerError(null);
+    setSelectedCustomerId(null);
+    setCustomerLinked(false);
+    setLinkedCustomerName(null);
 
-    // Fetch locations asynchronously
     fetchLocations().then((result) => {
       if (result.success) setLocations(result.data);
     });
@@ -68,10 +79,42 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
     }
   }, [success, onClose, onSuccess]);
 
+  const handleLinkCustomer = (customerId: number, customerName?: string) => {
+    setSelectedCustomerId(customerId);
+    setCustomerLinked(true);
+    setLinkedCustomerName(customerName ?? null);
+  };
+
+  const handleCreateCustomer = async (data: { name: string; email?: string; company?: string }) => {
+    const result = await createCustomer({
+      name: data.name,
+      phone: phoneValue,
+      email: data.email,
+      company: data.company,
+    });
+
+    if (result.success) {
+      setSelectedCustomerId(result.data.id);
+      setCustomerLinked(true);
+      setLinkedCustomerName(data.name);
+    } else {
+      setServerError(result.error ?? t("genericError"));
+    }
+  };
+
+  const handleSkip = () => {
+    setCustomerLinked(true);
+    setSelectedCustomerId(null);
+    setLinkedCustomerName(null);
+  };
+
   const onSubmit = async (data: TyreFormData) => {
     setServerError(null);
 
-    const result = await create(data);
+    const result = await create({
+      ...data,
+      customerId: selectedCustomerId ?? undefined,
+    });
 
     if (result?.success) {
       setSuccess(true);
@@ -102,6 +145,22 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
             />
             {errors.number && <span className="text-xs text-red-500">{errors.number.message}</span>}
           </div>
+
+          {/* Customer suggestion */}
+          {!customerLinked && (
+            <CustomerSuggestion
+              phone={phoneValue}
+              onLinkCustomer={(id) => handleLinkCustomer(id)}
+              onCreateCustomer={handleCreateCustomer}
+              onSkip={handleSkip}
+            />
+          )}
+
+          {customerLinked && linkedCustomerName && (
+            <div className="p-2 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">
+              ✓ {t("linkedTo")} <strong>{linkedCustomerName}</strong>
+            </div>
+          )}
 
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="location">{t("location")}</Label>
@@ -138,7 +197,7 @@ export default function AddTyreModal({ isOpen, onClose, onSuccess }: AddTyreModa
             >
               {t("cancel")}
             </Button>
-            <Button type="submit" className="rounded-xl min-w-[100px]" loading={loading}>
+            <Button type="submit" className="rounded-xl min-w-25" loading={loading}>
               {t("submit")}
             </Button>
           </div>
