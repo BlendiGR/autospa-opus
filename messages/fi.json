@@ -76,7 +76,7 @@
     "plate": "Rekisterinumero",
     "phone": "Puhelinnumero",
     "location": "Sijainti",
-    "locationPlaceholder": "esim., A1, B2, Hylly 3",
+    "locationPlaceholder": "esim., Lokationi 1, 2...",
     "customer": "Asiakas (Valinnainen)",
     "noCustomer": "Ei asiakasta",
     "cancel": "Peruuta",

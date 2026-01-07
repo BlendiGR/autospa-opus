@@ -206,7 +206,7 @@
     "jobPlate": "Plate Number",
     "jobPhone": "Phone Number",
     "jobLocation": "Storage Location",
-    "jobLocationPlaceholder": "e.g., A1, B2, Shelf 3",
+    "jobLocationPlaceholder": "e.g., Location 1. 2...",
     "addJobButton": "Add Storage",
     "jobSuccess": "Tyre storage added successfully!",
     "invoicePlate": "Plate Number",
