@@ -61,7 +61,12 @@
     "occupied": "Säilytetty",
     "returned": "Palautettu",
     "returnButton": "Palauta",
-    "storeButton": "Säilytä"
+    "storeButton": "Säilytä",
+    "editLocation": "Muokkaa sijaintia",
+    "saveLocation": "Tallenna sijainti",
+    "cancelEdit": "Peruuta",
+    "locationPlaceholder": "esim. A1, Hylly 3",
+    "locationError": "Sijainnin päivittäminen epäonnistui"
   },
   "ConfirmDialog": {
     "returnTitle": "Palauta asiakkaalle?",

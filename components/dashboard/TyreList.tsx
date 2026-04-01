@@ -1,4 +1,4 @@
-import { fetchTyres } from "@/app/actions/tyrehotel";
+import { fetchTyres, fetchLocations } from "@/app/actions/tyrehotel";
 import TyreCard from "./tyreCard";
 import Pagination from "../ui/pagination";
 import { getTranslations } from "next-intl/server";
@@ -12,13 +12,17 @@ interface TyreListProps {
 export default async function TyreList({ query, page = 1, isStored = true }: TyreListProps) {
   const t = await getTranslations("Dashboard");
 
-  const result = await fetchTyres(query, page, isStored);
+  const [result, locationsResult] = await Promise.all([
+    fetchTyres(query, page, isStored),
+    fetchLocations(),
+  ]);
 
   if (!result.success) {
     return <p className="text-red-500 text-center py-8">{t("fetchError")}</p>;
   }
 
   const { tyres, pagination } = result.data;
+  const locations = locationsResult.success ? locationsResult.data : [];
 
   if (tyres.length === 0) {
     return <p className="text-gray-500 text-center py-8">{t("noTyresFound")}</p>;
@@ -28,7 +32,7 @@ export default async function TyreList({ query, page = 1, isStored = true }: Tyr
     <div>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {tyres.map((tyre) => (
-          <TyreCard key={tyre.id} tyre={tyre} />
+          <TyreCard key={tyre.id} tyre={tyre} locations={locations} />
         ))}
       </div>
 

@@ -243,6 +243,33 @@ export async function createTyre(data: CreateTyreInput): Promise<ActionResult<Ty
 const tyreIdSchema = z.number().int().positive("Invalid tyre ID");
 
 /**
+ * Updates the location of a tyre.
+ */
+export async function updateTyreLocation(
+  id: number,
+  location: string
+): Promise<ActionResult<Tyre>> {
+  try {
+    const validated = tyreIdSchema.safeParse(id);
+    if (!validated.success) {
+      return { success: false, error: "Invalid tyre ID" };
+    }
+
+    await requireAuth();
+
+    const tyre = await prisma.tyre.update({
+      where: { id: validated.data },
+      data: { location },
+    });
+
+    revalidatePath("/dashboard");
+    return { success: true, data: tyre };
+  } catch (error: any) {
+    return { success: false, error: error || "Failed to update location" };
+  }
+}
+
+/**
  * Toggles the storage status of a tyre (Check-in / Check-out).
  */
 export async function toggleTyreStatus(id: number): Promise<ActionResult<TyreWithCustomer>> {

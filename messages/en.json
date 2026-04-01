@@ -61,7 +61,12 @@
     "occupied": "Stored",
     "returned": "Returned",
     "returnButton": "Return",
-    "storeButton": "Store"
+    "storeButton": "Store",
+    "editLocation": "Edit location",
+    "saveLocation": "Save location",
+    "cancelEdit": "Cancel",
+    "locationPlaceholder": "e.g. A1, Shelf 3",
+    "locationError": "Failed to update location"
   },
   "ConfirmDialog": {
     "returnTitle": "Return to Customer?",

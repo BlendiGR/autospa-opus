@@ -61,7 +61,12 @@
     "occupied": "Ruajtur",
     "returned": "E Kthyer",
     "returnButton": "Kthe",
-    "storeButton": "Ruaj"
+    "storeButton": "Ruaj",
+    "editLocation": "Ndrysho vendndodhjen",
+    "saveLocation": "Ruaj vendndodhjen",
+    "cancelEdit": "Anulo",
+    "locationPlaceholder": "p.sh. A1, Raft 3",
+    "locationError": "Dështoi përditësimi i vendndodhjes"
   },
   "ConfirmDialog": {
     "returnTitle": "Kthe tek Klienti?",

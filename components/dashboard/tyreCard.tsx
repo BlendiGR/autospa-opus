@@ -7,6 +7,7 @@ import ConfirmDialog from "../ui/confirm-dialog";
 import { useTranslations } from "next-intl";
 import { toggleTyreStatus } from "@/app/actions/tyrehotel";
 import { useLoading } from "@/hooks";
+import LocationDataList from "./locationDataList";
 
 interface TyreCardProps {
   tyre: {
@@ -19,6 +20,7 @@ interface TyreCardProps {
     isStored: boolean;
     customer: { name: string } | null;
   };
+  locations: string[];
 }
 
 /**
@@ -27,7 +29,7 @@ interface TyreCardProps {
  * Displays tyre details and provides toggle functionality for check-in/check-out.
  * Uses server action directly with revalidatePath for data refresh.
  */
-export default function TyreCard({ tyre }: TyreCardProps) {
+export default function TyreCard({ tyre, locations }: TyreCardProps) {
   const [showConfirm, setShowConfirm] = useState(false);
   const { loading, withLoading } = useLoading();
   const t = useTranslations("TyreCard");
@@ -50,7 +52,7 @@ export default function TyreCard({ tyre }: TyreCardProps) {
                         ${isStored ? "border-emerald-200" : "border-red-200"}`}
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-2xl font-bold text-gray-900 tracking-tight">{location || "—"}</h3>
+        <LocationDataList tyreId={id} currentLocation={location} locations={locations} />
         <span
           className={`px-4 py-1.5 rounded-full text-sm font-medium
                     ${isStored ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"}`}
