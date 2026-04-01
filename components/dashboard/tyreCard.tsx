@@ -51,10 +51,12 @@ export default function TyreCard({ tyre, locations }: TyreCardProps) {
       className={`bg-white rounded-2xl p-6 shadow-sm border
                         ${isStored ? "border-emerald-200" : "border-red-200"}`}
     >
-      <div className="flex items-center justify-between mb-4">
-        <LocationDataList tyreId={id} currentLocation={location} locations={locations} />
+      <div className="relative flex items-start justify-between mb-4">
+        <div className="flex-1 min-w-0 mr-3">
+          <LocationDataList tyreId={id} currentLocation={location} locations={locations} />
+        </div>
         <span
-          className={`px-4 py-1.5 rounded-full text-sm font-medium
+          className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium
                     ${isStored ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"}`}
         >
           {isStored ? t("occupied") : t("returned")}

@@ -14,7 +14,11 @@ interface LocationDataListProps {
   locations: string[];
 }
 
-export default function LocationDataList({ tyreId, currentLocation, locations }: LocationDataListProps) {
+export default function LocationDataList({
+  tyreId,
+  currentLocation,
+  locations,
+}: LocationDataListProps) {
   const t = useTranslations("TyreCard");
   const [editing, setEditing] = useState(false);
   const [savedLocation, setSavedLocation] = useState(currentLocation ?? "");
@@ -62,15 +66,15 @@ export default function LocationDataList({ tyreId, currentLocation, locations }:
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center gap-2">
+    <div className="absolute inset-0 top-9 z-50 bg-white flex flex-col justify-center gap-1">
+      <div className="flex flex-col items-center gap-2">
         <Input
           id={`location-${tyreId}`}
           list={`locations-${tyreId}`}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={savedLocation || t("locationPlaceholder")}
-          className="text-lg font-bold h-9"
+          className="text-lg font-bold h-9 w-full"
           autoFocus
           error={!!error}
         />
@@ -79,26 +83,28 @@ export default function LocationDataList({ tyreId, currentLocation, locations }:
             <option key={loc} value={loc} />
           ))}
         </datalist>
-        <Button
-          size="sm"
-          variant="default"
-          onClick={handleSave}
-          disabled={loading || !inputValue.trim()}
-          className="rounded-xl px-2"
-          aria-label={t("saveLocation")}
-        >
-          <Check size={16} />
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleCancel}
-          disabled={loading}
-          className="rounded-xl px-2"
-          aria-label={t("cancelEdit")}
-        >
-          <X size={16} />
-        </Button>
+        <div className="flex justify-end gap-2 w-full px-4">
+          <Button
+            size="sm"
+            variant="default"
+            onClick={handleSave}
+            disabled={loading || !inputValue.trim()}
+            className="rounded-xl px-2"
+            aria-label={t("saveLocation")}
+          >
+            <Check size={16} />
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={loading}
+            className="rounded-xl px-2"
+            aria-label={t("cancelEdit")}
+          >
+            <X size={16} />
+          </Button>
+        </div>
       </div>
       {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
